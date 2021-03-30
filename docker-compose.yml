@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  mariadb:
+    container_name: mariadb_container
+    image: mariadb:focal
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-admin}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-blog}
+      MYSQL_USER: ${MYSQL_USER:-admin}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-admin}
+    ports:
+      - "3306:3306"
+    networks:
+      - database
+    restart: always
+
+networks:
+  database:
+    driver: bridge
+
+volumes:
+  mariadb:

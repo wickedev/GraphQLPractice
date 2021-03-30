@@ -1,0 +1,14 @@
+graphql:
+  packages:
+    - org.example
+
+spring:
+  r2dbc:
+    url: r2dbc:mariadb://127.0.0.1:3306/blog
+    username: admin
+    password: admin
+
+logging:
+  level:
+    io.r2dbc.postgresql.QUERY: DEBUG # for queries
+    io.r2dbc.postgresql.PARAM: DEBUG # for parameters
