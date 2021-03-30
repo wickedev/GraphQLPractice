@@ -2,8 +2,8 @@
 
 package org.example.resolvers.user
 
-import com.expediagroup.graphql.spring.operations.Mutation
-import com.expediagroup.graphql.spring.operations.Query
+import com.expediagroup.graphql.server.operations.Mutation
+import com.expediagroup.graphql.server.operations.Query
 import org.example.model.User
 import org.example.service.UserService
 import org.slf4j.LoggerFactory

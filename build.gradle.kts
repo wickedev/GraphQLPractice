@@ -7,7 +7,7 @@ version = "0.1.0"
 
 val kotlinCoroutineVersion = "1.4.3"
 val spekVersion = "2.1.0-alpha.0.27+e76356a"
-val graphQLKotlinVersion = "3.7.0"
+val graphQLKotlinVersion = "4.0.0-alpha.17"
 
 plugins {
     kotlin("jvm") version "1.4.31"
@@ -63,6 +63,7 @@ dependencies {
 
     /* graphql */
     implementation("com.apollographql.federation:federation-graphql-java-support:0.6.3")
+    implementation("com.expediagroup:graphql-kotlin-federation:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:4.0.0-alpha.17")
 

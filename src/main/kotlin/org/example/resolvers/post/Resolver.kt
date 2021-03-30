@@ -2,8 +2,8 @@
 
 package org.example.resolvers.post
 
-import com.expediagroup.graphql.spring.operations.Mutation
-import com.expediagroup.graphql.spring.operations.Query
+import com.expediagroup.graphql.server.operations.Mutation
+import com.expediagroup.graphql.server.operations.Query
 import org.example.model.Post
 import org.example.service.PostService
 import org.slf4j.LoggerFactory

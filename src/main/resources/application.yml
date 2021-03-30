@@ -1,14 +1,24 @@
 graphql:
   packages:
     - org.example
+  federation:
+    enabled: true
+    tracing:
+      enabled: true
+      debug: true
 
 spring:
+  application:
+    name: blog
   r2dbc:
     url: r2dbc:mariadb://127.0.0.1:13306/blog
     username: admin
     password: admin
 
+
+
 logging:
   level:
     io.r2dbc.postgresql.QUERY: DEBUG # for queries
     io.r2dbc.postgresql.PARAM: DEBUG # for parameters
+
