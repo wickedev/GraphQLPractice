@@ -1,6 +1,6 @@
 package org.example.resolvers.post
 
-import org.example.model.Identifier
+import org.example.util.Identifier
 import org.example.resolvers.common.BoolFieldUpdateOperationsInput
 import org.example.resolvers.common.NullableStringFieldUpdateOperationsInput
 import org.example.resolvers.common.StringFieldUpdateOperationsInput

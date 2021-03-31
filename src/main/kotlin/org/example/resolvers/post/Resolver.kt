@@ -4,10 +4,14 @@ package org.example.resolvers.post
 
 import com.expediagroup.graphql.server.operations.Mutation
 import com.expediagroup.graphql.server.operations.Query
+import com.expediagroup.graphql.server.operations.Subscription
+import org.example.channel.PostCreatedChannel
 import org.example.model.Post
 import org.example.service.PostService
+import org.example.util.asFlux
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
 
 @Component
 class PostQuery(private val postService: PostService) : Query {
@@ -24,6 +28,18 @@ class PostQuery(private val postService: PostService) : Query {
         return postService.posts()
     }
 }
+
+
+@Component
+class PostSubscription(private val postCreatedChannel: PostCreatedChannel) : Subscription {
+    private val log = LoggerFactory.getLogger(PostSubscription::class.java)
+
+    fun posts(): Flux<Post> {
+        log.info("posts() called")
+        return postCreatedChannel.asFlux()
+    }
+}
+
 
 @Component
 class PostMutation(

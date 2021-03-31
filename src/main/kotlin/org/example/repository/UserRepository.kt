@@ -1,6 +1,7 @@
 package org.example.repository
 
-import org.example.model.Identifier
+import com.expediagroup.graphql.generator.scalars.ID
+import org.example.util.Identifier
 import org.example.model.User
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.repository.Query
@@ -30,6 +31,7 @@ class UserRepository(
         return entityTemplate.select(empty(), User::class.java)
     }
 
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     fun rawSqlFindBy(id: Identifier): Mono<User?> {
         // databaseClient == entityTemplate.databaseClient
         return databaseClient.sql("""

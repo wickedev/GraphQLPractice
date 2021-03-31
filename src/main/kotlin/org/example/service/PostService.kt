@@ -1,5 +1,6 @@
 package org.example.service
 
+import org.example.channel.PostCreatedChannel
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await
 import org.example.model.Post
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class PostService(
     private val postRepository: PostRepository,
+    private val postCreatedChannel: PostCreatedChannel,
     private val userService: UserService
 ) {
     private val log = LoggerFactory.getLogger(PostService::class.java)
@@ -34,7 +36,7 @@ class PostService(
 
         val user = data.author?.connect?.let { userService.user(it) }
 
-        return postRepository.save(
+        val post = postRepository.save(
             Post(
                 title = data.title,
                 content = data.content,
@@ -42,6 +44,8 @@ class PostService(
                 authorId = user?.id
             )
         ).await()
+        postCreatedChannel.offer(post)
+        return post
     }
 
     @Transactional

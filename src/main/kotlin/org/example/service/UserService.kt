@@ -1,5 +1,6 @@
 package org.example.service
 
+import org.example.channel.UserCreatedChannel
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await
 import org.example.model.User
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(
+    private val userRepository: UserRepository,
+    private val userCreatedChannel: UserCreatedChannel
+) {
     private val log = LoggerFactory.getLogger(UserService::class.java)
 
     @Transactional
@@ -43,7 +47,9 @@ class UserService(private val userRepository: UserRepository) {
     suspend fun createUser(data: UserCreateInput): User {
         log.info("createUser() called with: data = $data")
 
-        return userRepository.save(User(email = data.email, name = data.name)).await()
+        val user = userRepository.save(User(email = data.email, name = data.name)).await()
+        userCreatedChannel.offer(user)
+        return user
     }
 
     @Transactional

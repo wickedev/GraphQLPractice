@@ -1,11 +1,6 @@
 graphql:
   packages:
     - org.example
-  federation:
-    enabled: true
-    tracing:
-      enabled: true
-      debug: true
 
 spring:
   application:

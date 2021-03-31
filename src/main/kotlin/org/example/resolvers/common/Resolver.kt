@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component
 @Component
 class CommonMutation(
     private val databaseClient: DatabaseClient,
-    private val databasePopulator: DatabasePopulator,
-    private val connectionFactory: ConnectionFactory
+    private val connectionFactory: ConnectionFactory,
+    private val databasePopulator: DatabasePopulator
 ) : Mutation {
 
     suspend fun internal_unsafe_reset(): Int {

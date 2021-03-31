@@ -62,8 +62,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     /* graphql */
-    implementation("com.apollographql.federation:federation-graphql-java-support:0.6.3")
-    implementation("com.expediagroup:graphql-kotlin-federation:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:4.0.0-alpha.17")
 

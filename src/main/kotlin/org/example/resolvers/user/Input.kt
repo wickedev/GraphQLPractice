@@ -1,6 +1,6 @@
 package org.example.resolvers.user
 
-import org.example.model.Identifier
+import org.example.util.Identifier
 import org.example.resolvers.common.NullableStringFieldUpdateOperationsInput
 import org.example.resolvers.common.StringFieldUpdateOperationsInput
 

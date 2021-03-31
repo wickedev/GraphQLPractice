@@ -7,7 +7,7 @@ import io.r2dbc.spi.Closeable
 import io.r2dbc.spi.ConnectionFactories
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.runBlocking
-import org.example.model.DEFAULT_ID_VALUE
+import org.example.util.DEFAULT_ID_VALUE
 import org.example.model.Post
 import org.example.model.User
 import org.spekframework.spek2.dsl.LifecycleAware

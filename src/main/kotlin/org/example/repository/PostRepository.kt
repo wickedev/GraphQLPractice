@@ -1,6 +1,6 @@
 package org.example.repository
 
-import org.example.model.Identifier
+import org.example.util.Identifier
 import org.example.model.Post
 import org.springframework.data.repository.reactive.ReactiveSortingRepository
 import org.springframework.stereotype.Repository
