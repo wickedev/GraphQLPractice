@@ -27,7 +27,6 @@ import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator
 import org.springframework.r2dbc.core.DatabaseClient
 import java.util.ArrayList
-import java.util.function.Supplier
 
 val faker = Faker()
 val fixture = kotlinFixture {

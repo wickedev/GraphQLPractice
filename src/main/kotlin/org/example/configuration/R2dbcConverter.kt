@@ -1,7 +1,6 @@
 package org.example.configuration
 
 import com.expediagroup.graphql.generator.scalars.ID
-import io.r2dbc.spi.Row
 import org.slf4j.LoggerFactory
 import org.springframework.core.convert.ConversionService
 import org.springframework.core.convert.converter.Converter

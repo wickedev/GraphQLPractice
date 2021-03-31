@@ -1,6 +1,5 @@
 package org.example.repository
 
-import com.expediagroup.graphql.generator.scalars.ID
 import org.example.configuration.convert
 import org.example.entity.User
 import org.example.util.Identifier
@@ -35,15 +34,13 @@ class UserRepository(
     }
 
     fun rawSqlFindBy(id: Identifier): Mono<User?> {
-        val convertedId = converter.convert(id, Long::class.java)
-
         // databaseClient == entityTemplate.databaseClient
         return databaseClient.sql(
             """
             SELECT * FROM user WHERE id = :id
             """.trimIndent()
         )
-            .bind("id", convertedId)
+            .bind("id", converter.convert(id))
             .map { row, _ ->
                 User(
                     id = converter.convert(row["id"]),

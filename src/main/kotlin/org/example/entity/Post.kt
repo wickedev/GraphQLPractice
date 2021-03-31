@@ -18,7 +18,7 @@ data class Post(
     val content: String? = null,
     val published: Boolean = false,
 
-    ) {
+) {
     companion object {
         private val log = LoggerFactory.getLogger(Post::class.java)
     }
