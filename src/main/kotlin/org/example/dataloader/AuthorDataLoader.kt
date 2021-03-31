@@ -1,7 +1,8 @@
 package org.example.dataloader
 
 import com.expediagroup.graphql.server.execution.KotlinDataLoader
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.future
 import org.dataloader.DataLoader
 import org.example.entity.User
@@ -19,7 +20,7 @@ class AuthorDataLoader(private val service: UserService) : KotlinDataLoader<Iden
     override fun getDataLoader(): DataLoader<Identifier, User?> {
         return DataLoader<Identifier, User?> { ids ->
             log.info("getDataLoader() called with: ids = $ids")
-            GlobalScope.future {
+            CoroutineScope(Dispatchers.Unconfined).future {
                 service.users(ids)
             }
         }
