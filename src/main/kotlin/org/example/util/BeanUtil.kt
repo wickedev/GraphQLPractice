@@ -1,5 +1,8 @@
 package org.example.util
 
+import com.expediagroup.graphql.server.execution.KotlinDataLoader
+import graphql.schema.DataFetchingEnvironment
+import org.dataloader.DataLoader
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
@@ -21,6 +24,10 @@ class BeanUtil : ApplicationContextAware {
             return context.getBean(type.java)
         }
 
+        inline fun <reified T> getBean(): T {
+            return context.getBean(T::class.java)
+        }
+
         fun <T> getBean(type: Class<T>): T {
             return context.getBean(type)
         }
@@ -36,4 +43,11 @@ class BeanUtil : ApplicationContextAware {
             } else context.getBean(beanNames[0], type)
         }
     }
+}
+
+
+@Suppress("UNUSED_PARAMETER")
+inline fun <reified L : KotlinDataLoader<K, V>, K, V> DataFetchingEnvironment.getDataLoader(loaderClass: KClass<L>): DataLoader<K, V> {
+    val loader = BeanUtil.getBean<L>()
+    return this.getDataLoader(loader.dataLoaderName)
 }

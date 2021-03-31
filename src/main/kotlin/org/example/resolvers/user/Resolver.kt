@@ -5,6 +5,7 @@ package org.example.resolvers.user
 import com.expediagroup.graphql.server.operations.Mutation
 import com.expediagroup.graphql.server.operations.Query
 import com.expediagroup.graphql.server.operations.Subscription
+import graphql.schema.DataFetchingEnvironment
 import org.example.channel.UserCreatedChannel
 import org.example.entity.User
 import org.example.service.UserService
@@ -24,7 +25,7 @@ class UserQuery(
         return userService.user(where)
     }
 
-    suspend fun users(): List<User> {
+    suspend fun users(environment: DataFetchingEnvironment): List<User> {
         log.info("users() called")
         return userService.users()
     }

@@ -54,6 +54,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutineVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${kotlinCoroutineVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${kotlinCoroutineVersion}")
 
     /* spring */
     implementation("org.springframework.fu:spring-fu-kofu:0.5.0.7-patch-context")
@@ -110,7 +111,6 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<BootRun> {
     dependsOn(tasks.withType<DockerComposeUp>())
-
 
     systemProperty("spring.profiles.active", "dev")
     systemProperty("spring.devtools.restart.enabled", "true")

@@ -15,8 +15,8 @@ data class UserCreateNestedOneWithoutPostsInput(
 )
 
 data class UserWhereUniqueInput(
-    val email: String?,
-    val id: Identifier?
+    val email: String? = null,
+    val id: Identifier? = null
 )
 
 data class UserUpdateInput(

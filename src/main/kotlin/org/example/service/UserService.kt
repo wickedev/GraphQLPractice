@@ -6,6 +6,7 @@ import org.example.repository.UserRepository
 import org.example.resolvers.user.UserCreateInput
 import org.example.resolvers.user.UserUpdateInput
 import org.example.resolvers.user.UserWhereUniqueInput
+import org.example.util.Identifier
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await
 import org.slf4j.LoggerFactory
@@ -19,7 +20,6 @@ class UserService(
 ) {
     private val log = LoggerFactory.getLogger(UserService::class.java)
 
-    @Transactional
     suspend fun user(where: UserWhereUniqueInput): User? {
         log.info("user() called with: where = $where")
 
@@ -42,6 +42,12 @@ class UserService(
         log.info("users() called")
 
         return userRepository.findAll().await()
+    }
+
+    suspend fun users(ids: List<Identifier>): List<User> {
+        log.info("users() called with: ids = $ids")
+
+        return userRepository.findAllById(ids).await()
     }
 
     suspend fun createUser(data: UserCreateInput): User {
@@ -71,7 +77,7 @@ class UserService(
         log.info("deleteUser() called with: where = $where")
 
         val user = this.user(where) ?: return null
-        userRepository.deleteById(user.id!!).await()
+        userRepository.deleteById(user.id).await()
         return user
     }
 }

@@ -6,6 +6,7 @@ import org.example.repository.PostRepository
 import org.example.resolvers.post.PostCreateInput
 import org.example.resolvers.post.PostUpdateInput
 import org.example.resolvers.post.PostWhereUniqueInput
+import org.example.util.Identifier
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await
 import org.slf4j.LoggerFactory
@@ -28,6 +29,10 @@ class PostService(
     suspend fun posts(): List<Post> {
         log.info("posts() called")
         return postRepository.findAll().await()
+    }
+
+    suspend fun postsByAuthorId(id: Identifier): List<Post> {
+        return postRepository.findByAuthorId(id).await()
     }
 
     @Transactional

@@ -54,7 +54,7 @@ class PostMutation(
     }
 
     suspend fun updatePost(data: PostUpdateInput, where: PostWhereUniqueInput): Post? {
-        log.info("updatePost() called with: data = $data, whereUniqueInput = $where")
+        log.info("updatePost() called with: data = $data, where = $where")
         return postService.updatePost(data, where)
     }
 
