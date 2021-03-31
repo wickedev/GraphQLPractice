@@ -12,6 +12,7 @@
 
 - **Docker must be installed !!**
 - [Docker Compose](https://docs.docker.com/compose/)
+- [Maria DB](https://mariadb.org/)
 
 ## Testing
 
