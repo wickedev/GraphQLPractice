@@ -5,6 +5,7 @@ package org.example.resolvers.post
 import com.expediagroup.graphql.server.operations.Mutation
 import com.expediagroup.graphql.server.operations.Query
 import com.expediagroup.graphql.server.operations.Subscription
+import graphql.schema.DataFetchingEnvironment
 import org.example.channel.PostCreatedChannel
 import org.example.entity.Post
 import org.example.service.PostService
