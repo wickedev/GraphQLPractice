@@ -46,9 +46,9 @@ class UserRepository(
             .bind("id", convertedId)
             .map { row, _ ->
                 User(
-                    id = converter.convert(row["id"], ID::class.java),
+                    id = converter.convert(row["id"]),
                     email = converter.convert(row["email"]),
-                    name = row["name"] as String
+                    name = converter.convert(row["name"]),
                 )
             }
             .one()

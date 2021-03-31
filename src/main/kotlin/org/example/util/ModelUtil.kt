@@ -1,17 +1,11 @@
 package org.example.util
 
-import com.expediagroup.graphql.generator.scalars.ID
 
-typealias Identifier = ID
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.TYPEALIAS)
+annotation class Id
 
-val DEFAULT_ID_VALUE = null
+@Id
+typealias Identifier = Long
 
-val Identifier?.exist
-    get(): Boolean {
-        return this == null || this.value.isNotEmpty()
-    }
-
-val Identifier?.notExist
-    get(): Boolean {
-        return !exist
-    }
+const val DEFAULT_ID_VALUE = 0L

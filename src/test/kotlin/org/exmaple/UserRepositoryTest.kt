@@ -40,7 +40,7 @@ class UserRepositoryTest : Spek({
         it("fixture user and annotationFindBy are the same") {
             val user = fixture<User>()
             val saved = userRepository.save(user).await()
-            val found = userRepository.annotationFindBy(saved.id!!).await()
+            val found = userRepository.annotationFindBy(saved.id).await()
                 ?: throw Error("cannot find user by id")
             found.email.should.be.equal(user.email)
             found.name.should.be.equal(user.name)
@@ -58,7 +58,7 @@ class UserRepositoryTest : Spek({
         it("fixture user and rawSqlFindBy are the same") {
             val user = fixture<User>()
             val saved = userRepository.save(user).await()
-            val found = userRepository.rawSqlFindBy(saved.id!!).await()
+            val found = userRepository.rawSqlFindBy(saved.id).await()
                 ?: throw Error("cannot find user by id")
             found.email.should.be.equal(user.email)
             found.name.should.be.equal(user.name)

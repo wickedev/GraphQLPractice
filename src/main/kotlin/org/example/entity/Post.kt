@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table
 data class Post(
-    @Id val id: Identifier? = DEFAULT_ID_VALUE,
+    @Id val id: Identifier = DEFAULT_ID_VALUE,
     val authorId: Identifier? = null,
     val title: String,
     val content: String? = null,

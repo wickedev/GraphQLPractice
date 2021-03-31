@@ -15,7 +15,7 @@ import java.util.*
 class IDToLongWritingConverter : Converter<ID, Long> {
     private val log = LoggerFactory.getLogger(IDToLongWritingConverter::class.java)
     override fun convert(source: ID): Long {
-        log.info("convert() called with: source = $source")
+        log.debug("convert() called with: source = $source")
 
         return if (source.value.isNotEmpty()) {
             convertToBigInteger(UUID.fromString(source.value)).longValueExact()
@@ -29,7 +29,7 @@ class IDToLongWritingConverter : Converter<ID, Long> {
 class LongToIDReadingConverter : Converter<Long, ID> {
     private val log = LoggerFactory.getLogger(LongToIDReadingConverter::class.java)
     override fun convert(source: Long): ID {
-        log.info("convert() called with: source = $source")
+        log.debug("convert() called with: source = $source")
         return ID(convertFromBigInteger(source.toBigInteger()).toString())
     }
 }
