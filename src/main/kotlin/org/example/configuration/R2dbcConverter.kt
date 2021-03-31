@@ -1,7 +1,9 @@
 package org.example.configuration
 
 import com.expediagroup.graphql.generator.scalars.ID
+import io.r2dbc.spi.Row
 import org.slf4j.LoggerFactory
+import org.springframework.core.convert.ConversionService
 import org.springframework.core.convert.converter.Converter
 import org.springframework.data.convert.ReadingConverter
 import org.springframework.data.convert.WritingConverter
@@ -53,4 +55,8 @@ fun convertFromBigInteger(x: BigInteger): UUID {
     if (L < lo) lo = lo.subtract(B)
     if (L < hi) hi = hi.subtract(B)
     return UUID(hi.longValueExact(), lo.longValueExact())
+}
+
+inline fun <reified T> ConversionService.convert(target: Any?): T {
+    return convert(target, T::class.java)
 }

@@ -1,8 +1,8 @@
 package org.example.resolvers.user
 
-import org.example.util.Identifier
 import org.example.resolvers.common.NullableStringFieldUpdateOperationsInput
 import org.example.resolvers.common.StringFieldUpdateOperationsInput
+import org.example.util.Identifier
 
 
 data class UserCreateInput(

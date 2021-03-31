@@ -1,13 +1,13 @@
 package org.example.service
 
 import org.example.channel.UserCreatedChannel
-import org.example.util.coroutine.flux.await
-import org.example.util.coroutine.mono.await
 import org.example.entity.User
 import org.example.repository.UserRepository
 import org.example.resolvers.user.UserCreateInput
 import org.example.resolvers.user.UserUpdateInput
 import org.example.resolvers.user.UserWhereUniqueInput
+import org.example.util.coroutine.flux.await
+import org.example.util.coroutine.mono.await
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -71,7 +71,7 @@ class UserService(
         log.info("deleteUser() called with: where = $where")
 
         val user = this.user(where) ?: return null
-        userRepository.deleteById(user.id).await()
+        userRepository.deleteById(user.id!!).await()
         return user
     }
 }

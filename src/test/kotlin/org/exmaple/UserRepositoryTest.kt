@@ -1,11 +1,11 @@
 package org.exmaple
 
 import com.winterbe.expekt.should
-import org.example.util.coroutine.flux.await
-import org.example.util.coroutine.mono.await
 import org.example.entity.User
 import org.example.repository.R2dbcUserRepository
 import org.example.repository.UserRepository
+import org.example.util.coroutine.flux.await
+import org.example.util.coroutine.mono.await
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 

@@ -104,11 +104,13 @@ sourceSets {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
 
 tasks.withType<BootRun> {
     dependsOn(tasks.withType<DockerComposeUp>())
+
 
     systemProperty("spring.profiles.active", "dev")
     systemProperty("spring.devtools.restart.enabled", "true")

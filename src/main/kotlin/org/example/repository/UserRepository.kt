@@ -1,7 +1,9 @@
 package org.example.repository
 
-import org.example.util.Identifier
+import com.expediagroup.graphql.generator.scalars.ID
+import org.example.configuration.convert
 import org.example.entity.User
+import org.example.util.Identifier
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.relational.core.query.Query.empty
@@ -26,20 +28,26 @@ class UserRepository(
     private val databaseClient: DatabaseClient,
 ) : R2dbcUserRepository by repository {
 
+    private val converter = entityTemplate.converter.conversionService
+
     fun templateFindAll(): Flux<User> {
         return entityTemplate.select(empty(), User::class.java)
     }
 
     fun rawSqlFindBy(id: Identifier): Mono<User?> {
+        val convertedId = converter.convert(id, Long::class.java)
+
         // databaseClient == entityTemplate.databaseClient
-        return databaseClient.sql("""
+        return databaseClient.sql(
+            """
             SELECT * FROM user WHERE id = :id
-        """.trimIndent())
-            .bind("id", id)
+            """.trimIndent()
+        )
+            .bind("id", convertedId)
             .map { row, _ ->
                 User(
-                    id = row["id"] as Identifier,
-                    email = row["email"] as String,
+                    id = converter.convert(row["id"], ID::class.java),
+                    email = converter.convert(row["email"]),
                     name = row["name"] as String
                 )
             }
