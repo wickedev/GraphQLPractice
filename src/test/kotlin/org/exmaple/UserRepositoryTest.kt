@@ -55,7 +55,7 @@ class UserRepositoryTest : Spek({
             users[0].name.should.be.equal(user.name)
         }
 
-        it("fixture user and templateFindAll are the same") {
+        it("fixture user and rawSqlFindBy are the same") {
             val user = fixture<User>()
             val saved = userRepository.save(user).await()
             val found = userRepository.rawSqlFindBy(saved.id!!).await()
