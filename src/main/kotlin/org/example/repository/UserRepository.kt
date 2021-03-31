@@ -30,7 +30,6 @@ class UserRepository(
         return entityTemplate.select(empty(), User::class.java)
     }
 
-    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     fun rawSqlFindBy(id: Identifier): Mono<User?> {
         // databaseClient == entityTemplate.databaseClient
         return databaseClient.sql("""
