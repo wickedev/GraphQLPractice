@@ -1,8 +1,7 @@
 package org.example.repository
 
-import com.expediagroup.graphql.generator.scalars.ID
 import org.example.util.Identifier
-import org.example.model.User
+import org.example.entity.User
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.relational.core.query.Query.empty

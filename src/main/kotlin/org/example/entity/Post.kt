@@ -1,4 +1,4 @@
-package org.example.model
+package org.example.entity
 
 import org.example.repository.UserRepository
 import org.example.util.BeanUtil
@@ -10,8 +10,8 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table
 data class Post(
-    @Id val id: Identifier = DEFAULT_ID_VALUE,
-    val authorId: Identifier = null,
+    @Id val id: Identifier? = DEFAULT_ID_VALUE,
+    val authorId: Identifier? = null,
     val title: String,
     val content: String? = null,
     val published: Boolean = false,

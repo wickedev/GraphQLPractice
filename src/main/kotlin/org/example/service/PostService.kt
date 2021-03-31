@@ -3,7 +3,7 @@ package org.example.service
 import org.example.channel.PostCreatedChannel
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await
-import org.example.model.Post
+import org.example.entity.Post
 import org.example.repository.PostRepository
 import org.example.resolvers.post.PostCreateInput
 import org.example.resolvers.post.PostUpdateInput

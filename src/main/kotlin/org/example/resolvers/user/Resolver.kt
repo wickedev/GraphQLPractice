@@ -6,7 +6,7 @@ import com.expediagroup.graphql.server.operations.Mutation
 import com.expediagroup.graphql.server.operations.Query
 import com.expediagroup.graphql.server.operations.Subscription
 import org.example.channel.UserCreatedChannel
-import org.example.model.User
+import org.example.entity.User
 import org.example.service.UserService
 import org.example.util.asFlux
 import org.slf4j.LoggerFactory

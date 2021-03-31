@@ -8,8 +8,8 @@ import io.r2dbc.spi.ConnectionFactories
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.runBlocking
 import org.example.util.DEFAULT_ID_VALUE
-import org.example.model.Post
-import org.example.model.User
+import org.example.entity.Post
+import org.example.entity.User
 import org.spekframework.spek2.dsl.LifecycleAware
 import org.springframework.core.io.ClassPathResource
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
