@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package org.example.configuration
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -8,7 +10,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@OptIn(ExperimentalCoroutinesApi::class)
 class CommonConfiguration {
 
     @Bean
