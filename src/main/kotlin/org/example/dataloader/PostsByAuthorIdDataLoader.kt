@@ -8,12 +8,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class PostsByAuthorIdDataLoader(private val service: PostService) :
-    CoroutineDataLoader<Identifier, List<Post>>() {
+class PostsByAuthorIdDataLoader(private val service: PostService) : CoroutineDataLoader<Identifier, List<Post>>() {
     private val log = LoggerFactory.getLogger(PostsByAuthorIdDataLoader::class.java)
 
-    override suspend fun getDataLoader(keys: List<Identifier>): List<List<Post>> {
-        log.info("getDataLoader() called with: ids = $keys")
+    override suspend fun batchLoad(keys: List<Identifier>): List<List<Post>> {
+        log.info("batchLoad() called with: keys = $keys")
         return keys.map { service.postsByAuthorId(it) }
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component
 class AuthorDataLoader(private val service: UserService) : CoroutineDataLoader<Identifier, User?>() {
     private val log = LoggerFactory.getLogger(AuthorDataLoader::class.java)
 
-    override suspend fun getDataLoader(keys: List<Identifier>): List<User?> {
-        log.info("getDataLoader() called with: ids = $keys")
+    override suspend fun batchLoad(keys: List<Identifier>): List<User?> {
+        log.info("batchLoad() called with: ids = $keys")
         return service.users(keys)
     }
 }

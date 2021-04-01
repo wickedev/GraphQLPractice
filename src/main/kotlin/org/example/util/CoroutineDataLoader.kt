@@ -6,29 +6,93 @@ import graphql.schema.DataFetchingEnvironment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.future
+import org.dataloader.BatchLoaderEnvironment
 import org.dataloader.DataLoader
+import org.dataloader.DataLoaderOptions
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 typealias CoroutineBatchLoader<K, V> = suspend (List<K>) -> List<V>
 
+typealias CoroutineWithContextBatchLoader<K, V> = suspend (List<K>, environment: BatchLoaderEnvironment) -> List<V>
+
 abstract class CoroutineDataLoader<K, V> : KotlinDataLoader<K, V> {
 
+
     companion object {
-        inline fun <K, V> newDataLoader(crossinline batchLoader: CoroutineBatchLoader<K, V>): DataLoader<K, V> {
+        fun <K, V> newDataLoader(
+            batchLoader: CoroutineBatchLoader<K, V>,
+        ): DataLoader<K, V> {
             return DataLoader.newDataLoader { keys ->
                 CoroutineScope(Dispatchers.Unconfined).future {
                     batchLoader(keys)
                 }
             }
         }
+
+        fun <K, V> newDataLoader(
+            batchLoader: CoroutineBatchLoader<K, V>,
+            options: DataLoaderOptions
+        ): DataLoader<K, V> {
+            return DataLoader.newDataLoader(
+                { keys ->
+                    CoroutineScope(Dispatchers.Unconfined).future {
+                        batchLoader(keys)
+                    }
+                }, options
+            )
+        }
     }
 
     override val dataLoaderName: String = this::class.java.name
 
-    final override fun getDataLoader(): DataLoader<K, V> = newDataLoader(::getDataLoader)
+    open val option: DataLoaderOptions? = null
 
-    abstract suspend fun getDataLoader(keys: List<K>): List<V>
+    final override fun getDataLoader(): DataLoader<K, V> {
+        return if (option == null) newDataLoader(::batchLoad) else newDataLoader(::batchLoad, option!!)
+    }
+
+    abstract suspend fun batchLoad(keys: List<K>): List<V>
+}
+
+
+abstract class CoroutineWithContextDataLoader<K, V> : KotlinDataLoader<K, V> {
+
+    companion object {
+        fun <K, V> newDataLoader(
+            batchLoader: CoroutineWithContextBatchLoader<K, V>,
+        ): DataLoader<K, V> {
+            return DataLoader.newDataLoader { keys, environment ->
+                CoroutineScope(Dispatchers.Unconfined).future {
+                    batchLoader(keys, environment)
+                }
+            }
+        }
+
+        inline fun <K, V> newDataLoader(
+            crossinline batchLoader: CoroutineWithContextBatchLoader<K, V>,
+            options: DataLoaderOptions
+        ): DataLoader<K, V> {
+            return DataLoader.newDataLoader(
+                { keys, environment ->
+                    CoroutineScope(Dispatchers.Unconfined).future {
+                        batchLoader(keys, environment)
+                    }
+                }, options
+            )
+        }
+    }
+
+
+    override val dataLoaderName: String = this::class.java.name
+
+    open val option: DataLoaderOptions? = null
+
+    final override fun getDataLoader(): DataLoader<K, V> {
+        return if (option == null) newDataLoader(::batchLoad) else newDataLoader(::batchLoad, option!!)
+    }
+
+    abstract suspend fun batchLoad(keys: List<K>, environment: BatchLoaderEnvironment): List<V>
 }
 
 
