@@ -1,13 +1,8 @@
 package org.example.util
 
-import com.expediagroup.graphql.server.execution.KotlinDataLoader
-import com.expediagroup.graphql.server.extensions.getValueFromDataLoader
-import graphql.schema.DataFetchingEnvironment
-import org.dataloader.DataLoader
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
-import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 
