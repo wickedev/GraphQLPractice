@@ -37,7 +37,7 @@ class DatabaseConfiguration {
         return initializer
     }
 
-    @Bean
+    /*@Bean
     fun r2dbcCustomConversions(connectionFactory: ConnectionFactory): R2dbcCustomConversions {
         val dialect = DialectResolver.getDialect(connectionFactory)
         val converters: MutableList<Any> = ArrayList(dialect.converters)
@@ -48,5 +48,5 @@ class DatabaseConfiguration {
             LongToIDReadingConverter()
         )
         return R2dbcCustomConversions(storeConversions, converterList)
-    }
+    }*/
 }

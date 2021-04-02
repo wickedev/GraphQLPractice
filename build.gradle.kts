@@ -65,6 +65,8 @@ dependencies {
     /* graphql */
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:4.0.0-alpha.17")
+    implementation("com.graphql-java:graphql-java-extended-scalars:16.0.0")
+    implementation("com.zhokhov.graphql:graphql-java-datetime:4.0.0")
 
     /* database */
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")

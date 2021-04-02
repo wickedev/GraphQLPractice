@@ -8,6 +8,7 @@ import org.example.util.getValueFromDataLoader
 import org.slf4j.LoggerFactory
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
+import java.time.LocalDateTime
 import java.util.concurrent.CompletableFuture
 
 @Table
@@ -16,6 +17,7 @@ data class Post(
     val authorId: Identifier? = null,
     val title: String,
     val content: String? = null,
+    val postedAt: LocalDateTime = LocalDateTime.now(),
     val published: Boolean = false,
 
     ) {
