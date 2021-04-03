@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AuthorDataLoader(private val service: UserService) : CoroutineDataLoader<Identifier, User?>() {
+class AuthorDataLoader(private val service: UserService) : CoroutineDataLoader<Identifier, User>() {
     private val log = LoggerFactory.getLogger(AuthorDataLoader::class.java)
 
-    override suspend fun batchLoad(keys: List<Identifier>): List<User?> {
+    override suspend fun batchLoad(keys: List<Identifier>): List<User> {
         log.info("batchLoad() called with: ids = $keys")
         return service.users(keys)
     }

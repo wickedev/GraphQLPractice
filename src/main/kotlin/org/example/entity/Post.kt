@@ -19,14 +19,13 @@ data class Post(
     val content: String? = null,
     val postedAt: LocalDateTime = LocalDateTime.now(),
     val published: Boolean = false,
-
-    ) {
+) {
     companion object {
         private val log = LoggerFactory.getLogger(Post::class.java)
     }
 
-    fun author(env: DataFetchingEnvironment): CompletableFuture<User?> {
+    fun author(env: DataFetchingEnvironment): CompletableFuture<User>? {
         log.info("author() called with: authorId: $authorId")
-        return env.getValueFromDataLoader(AuthorDataLoader::class, id)
+        return authorId?.let { env.getValueFromDataLoader(AuthorDataLoader::class, authorId) }
     }
 }
