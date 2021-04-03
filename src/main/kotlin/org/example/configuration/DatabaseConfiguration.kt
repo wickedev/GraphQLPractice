@@ -1,13 +1,18 @@
 package org.example.configuration
 
 import io.r2dbc.spi.ConnectionFactory
+import org.example.configuration.r2dbc.*
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.io.ClassPathResource
 import org.springframework.data.convert.CustomConversions
+import org.springframework.data.r2dbc.convert.MappingR2dbcConverter
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions
 import org.springframework.data.r2dbc.dialect.DialectResolver
+import org.springframework.data.r2dbc.mapping.R2dbcMappingContext
+import org.springframework.data.relational.core.mapping.NamingStrategy
 import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer
 import org.springframework.r2dbc.connection.init.DatabasePopulator
@@ -39,13 +44,34 @@ class DatabaseConfiguration {
     @Bean
     fun r2dbcCustomConversions(connectionFactory: ConnectionFactory): R2dbcCustomConversions {
         val dialect = DialectResolver.getDialect(connectionFactory)
-        val converters: MutableList<Any> = ArrayList(dialect.converters)
-        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS)
-        val storeConversions = CustomConversions.StoreConversions.of(dialect.simpleTypeHolder, converters)
+        val converters = listOf(
+            *dialect.converters.toTypedArray(),
+            *R2dbcCustomConversions.STORE_CONVERTERS.toTypedArray()
+        )
+        val storeConversions = CustomConversions.StoreConversions.of(
+            dialect.simpleTypeHolder,
+            converters
+        )
         val converterList: List<Converter<*, *>> = listOf(
             IDToLongWritingConverter(),
-            LongToIDReadingConverter()
+            LongToIDReadingConverter(),
+            OffsetDateTimeToLocalDateTimeWritingConverter(),
+            LocalDateTimeToOffsetDateTimeReadingConverter(),
+            ZonedDateTimeToLocalDateTimeWritingConverter(),
+            LocalDateTimeToZonedDateTimeReadingConverter(),
         )
         return R2dbcCustomConversions(storeConversions, converterList)
+    }
+
+    @Bean
+    fun isNewEntityStrategy() = CustomIsNewEntityStrategy()
+
+    @Bean
+    fun mappingR2dbcConverter(
+        context: R2dbcMappingContext,
+        conversions: CustomConversions,
+        isNewEntityStrategy: IsNewEntityStrategy
+    ): MappingR2dbcConverter {
+        return CustomMappingR2dbcConverter(context, conversions, isNewEntityStrategy)
     }
 }

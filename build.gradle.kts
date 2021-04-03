@@ -71,6 +71,7 @@ dependencies {
     /* database */
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.mariadb:r2dbc-mariadb:1.0.1")
+    implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
 
     /* security */
     implementation("io.jsonwebtoken:jjwt-api:0.11.1")

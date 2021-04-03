@@ -7,8 +7,9 @@ import org.example.util.Identifier
 import org.example.util.getValueFromDataLoader
 import org.slf4j.LoggerFactory
 import org.springframework.data.annotation.Id
+import org.springframework.data.mapping.PersistentEntity
 import org.springframework.data.relational.core.mapping.Table
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.concurrent.CompletableFuture
 
 @Table
@@ -17,14 +18,14 @@ data class Post(
     val authorId: Identifier? = null,
     val title: String,
     val content: String? = null,
-    val postedAt: LocalDateTime = LocalDateTime.now(),
+    val postedAt: ZonedDateTime = ZonedDateTime.now(),
     val published: Boolean = false,
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(Post::class.java)
     }
 
-    fun author(env: DataFetchingEnvironment): CompletableFuture<User>? {
+    fun author(env: DataFetchingEnvironment): CompletableFuture<User?>? {
         log.info("author() called with: authorId: $authorId")
         return authorId?.let { env.getValueFromDataLoader(AuthorDataLoader::class, authorId) }
     }
