@@ -5,7 +5,7 @@ import org.springframework.data.relational.repository.support.MappingRelationalE
 
 class CustomMappingRelationalEntityInformation<T, I>(
     entity: RelationalPersistentEntity<T>,
-    private val isNewEntityStrategy: IsNewEntityStrategy?,
+    private val additionalIsNewStrategy: AdditionalIsNewStrategy?,
 ) :
     MappingRelationalEntityInformation<T, I>(entity) {
 
@@ -19,7 +19,7 @@ class CustomMappingRelationalEntityInformation<T, I>(
     override fun isNew(obj: T): Boolean {
         val value = valueLookup(obj)
 
-        return if (isNewEntityStrategy?.isNew(valueType, value) == true) {
+        return if (additionalIsNewStrategy?.isNew(valueType, value) == true) {
             true
         } else {
             super.isNew(obj)

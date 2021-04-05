@@ -22,12 +22,12 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
     private var mappingContext: MappingContext? = null
     private var converter: R2dbcConverter? = null
     private var operations: R2dbcEntityOperations? = null
-    private val isNewEntityStrategy: IsNewEntityStrategy?
+    private val additionalIsNewStrategy: AdditionalIsNewStrategy?
 
     constructor(
         databaseClient: DatabaseClient,
         dataAccessStrategy: ReactiveDataAccessStrategy,
-        isNewEntityStrategy: IsNewEntityStrategy?,
+        additionalIsNewStrategy: AdditionalIsNewStrategy?,
     ) : super(
         databaseClient,
         dataAccessStrategy
@@ -35,18 +35,18 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
         this.converter = dataAccessStrategy.converter
         this.mappingContext = converter?.mappingContext
         this.operations = R2dbcEntityTemplate(databaseClient, dataAccessStrategy)
-        this.isNewEntityStrategy = isNewEntityStrategy
+        this.additionalIsNewStrategy = additionalIsNewStrategy
     }
 
     constructor(
         operations: R2dbcEntityOperations,
-        isNewEntityStrategy: IsNewEntityStrategy?
+        additionalIsNewStrategy: AdditionalIsNewStrategy?
     ) : super(operations) {
         val dataAccessStrategy = operations.dataAccessStrategy
         this.converter = dataAccessStrategy.converter
         this.mappingContext = converter?.mappingContext
         this.operations = operations
-        this.isNewEntityStrategy = isNewEntityStrategy
+        this.additionalIsNewStrategy = additionalIsNewStrategy
     }
 
     override fun <T : Any?, ID : Any?> getEntityInformation(domainClass: Class<T>): RelationalEntityInformation<T, ID> {
@@ -58,7 +58,7 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
         information: RepositoryInformation?
     ): RelationalEntityInformation<T, ID> {
         val entity = mappingContext?.getRequiredPersistentEntity(domainClass)
-        return CustomMappingRelationalEntityInformation(entity as RelationalPersistentEntity<T>,isNewEntityStrategy)
+        return CustomMappingRelationalEntityInformation(entity as RelationalPersistentEntity<T>,additionalIsNewStrategy)
     }
 
     override fun getTargetRepository(information: RepositoryInformation): Any? {

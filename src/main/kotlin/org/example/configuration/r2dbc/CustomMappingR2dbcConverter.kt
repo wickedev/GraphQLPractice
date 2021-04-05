@@ -14,7 +14,7 @@ import java.util.function.BiFunction
 class CustomMappingR2dbcConverter(
     context: MappingContext<out RelationalPersistentEntity<*>?, out RelationalPersistentProperty?>,
     conversions: CustomConversions,
-    private val isNewEntityStrategy: IsNewEntityStrategy
+    private val additionalIsNewStrategy: AdditionalIsNewStrategy
 ) : MappingR2dbcConverter(context, conversions) {
 
     override fun <T : Any?> populateIdIfNecessary(obj: T): BiFunction<Row, RowMetadata, T?> {
@@ -29,7 +29,7 @@ class CustomMappingR2dbcConverter(
             val id = propertyAccessor.getProperty(idProperty)
 
             val idPropertyUpdateNeeded = when {
-                isNewEntityStrategy.isNew(idProperty.type, id) -> true
+                additionalIsNewStrategy.isNew(idProperty.type, id) -> true
                 idProperty.type.isPrimitive -> {
                     id is Number && id.toLong() == 0L
                 }

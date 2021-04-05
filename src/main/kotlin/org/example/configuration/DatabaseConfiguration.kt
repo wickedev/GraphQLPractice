@@ -2,7 +2,6 @@ package org.example.configuration
 
 import io.r2dbc.spi.ConnectionFactory
 import org.example.configuration.r2dbc.*
-import org.springframework.beans.factory.ObjectProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
@@ -12,7 +11,6 @@ import org.springframework.data.r2dbc.convert.MappingR2dbcConverter
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions
 import org.springframework.data.r2dbc.dialect.DialectResolver
 import org.springframework.data.r2dbc.mapping.R2dbcMappingContext
-import org.springframework.data.relational.core.mapping.NamingStrategy
 import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer
 import org.springframework.r2dbc.connection.init.DatabasePopulator
@@ -64,14 +62,14 @@ class DatabaseConfiguration {
     }
 
     @Bean
-    fun isNewEntityStrategy() = CustomIsNewEntityStrategy()
+    fun additionalIsNewStrategy() = CustomAdditionalIsNewStrategy()
 
     @Bean
     fun mappingR2dbcConverter(
         context: R2dbcMappingContext,
         conversions: CustomConversions,
-        isNewEntityStrategy: IsNewEntityStrategy
+        additionalIsNewStrategy: AdditionalIsNewStrategy
     ): MappingR2dbcConverter {
-        return CustomMappingR2dbcConverter(context, conversions, isNewEntityStrategy)
+        return CustomMappingR2dbcConverter(context, conversions, additionalIsNewStrategy)
     }
 }

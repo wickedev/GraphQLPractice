@@ -11,17 +11,17 @@ import org.springframework.r2dbc.core.DatabaseClient
 
 class CustomR2dbcRepositoryFactoryBean<T : Repository<S, ID>, S, ID : java.io.Serializable>(
     repositoryInterface: Class<out T?>,
-    private val isNewEntityStrategy: IsNewEntityStrategy?
+    private val additionalIsNewStrategy: AdditionalIsNewStrategy?
 ) : R2dbcRepositoryFactoryBean<T, S, ID>(repositoryInterface) {
 
     override fun getFactoryInstance(
         client: DatabaseClient,
         dataAccessStrategy: ReactiveDataAccessStrategy
     ): RepositoryFactorySupport {
-        return CustomSimpleR2dbcRepositoryFactory(client, dataAccessStrategy, isNewEntityStrategy)
+        return CustomSimpleR2dbcRepositoryFactory(client, dataAccessStrategy, additionalIsNewStrategy)
     }
 
     override fun getFactoryInstance(operations: R2dbcEntityOperations): RepositoryFactorySupport {
-        return CustomSimpleR2dbcRepositoryFactory(operations, isNewEntityStrategy)
+        return CustomSimpleR2dbcRepositoryFactory(operations, additionalIsNewStrategy)
     }
 }
