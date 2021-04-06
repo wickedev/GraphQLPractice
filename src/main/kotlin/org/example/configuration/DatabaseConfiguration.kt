@@ -10,6 +10,7 @@ import org.springframework.data.convert.CustomConversions
 import org.springframework.data.r2dbc.convert.MappingR2dbcConverter
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions
 import org.springframework.data.r2dbc.dialect.DialectResolver
+import org.springframework.data.r2dbc.dialect.R2dbcDialect
 import org.springframework.data.r2dbc.mapping.R2dbcMappingContext
 import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer
@@ -22,10 +23,14 @@ class DatabaseConfiguration {
 
     @Bean
     fun populator(): DatabasePopulator {
-        val populator = CompositeDatabasePopulator()
-        val scheme = ClassPathResource("db/scheme.sql")
-        populator.addPopulators(ResourceDatabasePopulator(scheme))
-        return populator
+        val resourcePaths = listOf("db/scheme.sql")
+        return CompositeDatabasePopulator(
+            resourcePaths.map {
+                ResourceDatabasePopulator(
+                    ClassPathResource(it)
+                )
+            }
+        )
     }
 
     @Bean
@@ -42,23 +47,17 @@ class DatabaseConfiguration {
     @Bean
     fun r2dbcCustomConversions(connectionFactory: ConnectionFactory): R2dbcCustomConversions {
         val dialect = DialectResolver.getDialect(connectionFactory)
-        val converters = listOf(
-            *dialect.converters.toTypedArray(),
-            *R2dbcCustomConversions.STORE_CONVERTERS.toTypedArray()
+        return R2dbcCustomConversions(
+            listOf(
+                *dialect.converters.toTypedArray(),
+                IDToLongWritingConverter(),
+                LongToIDReadingConverter(),
+                OffsetDateTimeToLocalDateTimeWritingConverter(),
+                LocalDateTimeToOffsetDateTimeReadingConverter(),
+                ZonedDateTimeToLocalDateTimeWritingConverter(),
+                LocalDateTimeToZonedDateTimeReadingConverter(),
+            )
         )
-        val storeConversions = CustomConversions.StoreConversions.of(
-            dialect.simpleTypeHolder,
-            converters
-        )
-        val converterList: List<Converter<*, *>> = listOf(
-            IDToLongWritingConverter(),
-            LongToIDReadingConverter(),
-            OffsetDateTimeToLocalDateTimeWritingConverter(),
-            LocalDateTimeToOffsetDateTimeReadingConverter(),
-            ZonedDateTimeToLocalDateTimeWritingConverter(),
-            LocalDateTimeToZonedDateTimeReadingConverter(),
-        )
-        return R2dbcCustomConversions(storeConversions, converterList)
     }
 
     @Bean
