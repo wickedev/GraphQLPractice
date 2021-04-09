@@ -1,4 +1,4 @@
-package org.example.configuration
+package org.example.configuration.graphql
 
 import com.expediagroup.graphql.generator.hooks.SchemaGeneratorHooks
 import com.zhokhov.graphql.datetime.*
