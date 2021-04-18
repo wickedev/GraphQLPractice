@@ -4,6 +4,7 @@ import com.winterbe.expekt.should
 import org.example.entity.User
 import org.example.repository.R2dbcUserRepository
 import org.example.repository.UserRepository
+import org.example.util.DefaultExtendedDatabaseClient
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await
 import org.spekframework.spek2.Spek
@@ -17,7 +18,7 @@ class UserRepositoryTest : Spek({
             UserRepository(
                 dbContainer.getRepository(R2dbcUserRepository::class.java),
                 dbContainer.r2dbcEntityTemplate,
-                dbContainer.databaseClient
+                dbContainer.extendedDatabaseClient,
             )
         }
 

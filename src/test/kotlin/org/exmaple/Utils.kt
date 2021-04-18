@@ -7,11 +7,14 @@ import io.r2dbc.spi.Closeable
 import io.r2dbc.spi.ConnectionFactories
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.runBlocking
-import org.example.configuration.IDToLongWritingConverter
-import org.example.configuration.LongToIDReadingConverter
+import org.example.configuration.*
+import org.example.configuration.r2dbc.CustomAdditionalIsNewStrategy
+import org.example.configuration.r2dbc.CustomMappingR2dbcConverter
+import org.example.configuration.r2dbc.CustomSimpleR2dbcRepositoryFactory
 import org.example.entity.Post
 import org.example.entity.User
 import org.example.util.DEFAULT_ID_VALUE
+import org.example.util.DefaultExtendedDatabaseClient
 import org.spekframework.spek2.dsl.LifecycleAware
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.io.ClassPathResource
@@ -43,15 +46,18 @@ class DatabaseContainer(spek: LifecycleAware) {
 
     val dialect = DialectResolver.getDialect(connectionFactory)
 
+    val additionalIsNewStrategy by spek.memoized { CustomAdditionalIsNewStrategy() }
+
     val conversions by spek.memoized {
-        val converters: MutableList<Any> = ArrayList(dialect.converters)
-        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS)
-        val storeConversions = CustomConversions.StoreConversions.of(dialect.simpleTypeHolder, converters)
-        val converterList: List<Converter<*, *>> = listOf(
+        R2dbcCustomConversions.of(
+            dialect,
             IDToLongWritingConverter(),
-            LongToIDReadingConverter()
+            LongToIDReadingConverter(),
+            OffsetDateTimeToLocalDateTimeWritingConverter(),
+            LocalDateTimeToOffsetDateTimeReadingConverter(),
+            ZonedDateTimeToLocalDateTimeWritingConverter(),
+            LocalDateTimeToZonedDateTimeReadingConverter(),
         )
-        R2dbcCustomConversions(storeConversions, converterList)
     }
 
     val mappingContext by spek.memoized {
@@ -61,19 +67,31 @@ class DatabaseContainer(spek: LifecycleAware) {
     }
 
     val converter by spek.memoized {
-        MappingR2dbcConverter(mappingContext, conversions)
+        CustomMappingR2dbcConverter(mappingContext, conversions, additionalIsNewStrategy)
     }
 
     val databaseClient by spek.memoized {
         DatabaseClient.create(connectionFactory)
     }
 
+    val extendedDatabaseClient by spek.memoized {
+        DefaultExtendedDatabaseClient(
+            databaseClient,
+            converter
+        )
+    }
+
+
     val r2dbcEntityTemplate by spek.memoized {
         R2dbcEntityTemplate(databaseClient, dialect, converter)
     }
 
     private val repositoryFactory by spek.memoized {
-        R2dbcRepositoryFactory(r2dbcEntityTemplate)
+        CustomSimpleR2dbcRepositoryFactory(
+            databaseClient,
+            r2dbcEntityTemplate.dataAccessStrategy,
+            additionalIsNewStrategy
+        )
     }
 
     fun create() {
