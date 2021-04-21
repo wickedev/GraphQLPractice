@@ -7,7 +7,6 @@ import org.example.util.Identifier
 import org.example.util.getValueFromDataLoader
 import org.slf4j.LoggerFactory
 import org.springframework.data.annotation.Id
-import org.springframework.data.mapping.PersistentEntity
 import org.springframework.data.relational.core.mapping.Table
 import java.time.ZonedDateTime
 import java.util.concurrent.CompletableFuture

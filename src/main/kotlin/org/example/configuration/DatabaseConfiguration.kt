@@ -70,10 +70,4 @@ class DatabaseConfiguration {
     ): MappingR2dbcConverter {
         return CustomMappingR2dbcConverter(context, conversions, additionalIsNewStrategy)
     }
-
-    @Bean
-    fun extendedDatabaseClient(
-        databaseClient: DatabaseClient,
-        converter: MappingR2dbcConverter,
-    ): ExtendedDatabaseClient = DefaultExtendedDatabaseClient(databaseClient, converter)
 }
