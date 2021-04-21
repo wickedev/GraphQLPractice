@@ -11,13 +11,12 @@ import java.util.concurrent.CancellationException
 @OptIn(InternalCoroutinesApi::class)
 @Suppress("EXPERIMENTAL_API_USAGE")
 fun <E> BroadcastChannel<E>.asFlux(): Flux<E> {
-    var subscription: ReceiveChannel<E>? = null
+    val subscription: ReceiveChannel<E> by lazy { openSubscription() }
 
     return flux {
-        subscription = openSubscription()
-        while (subscription?.isClosedForReceive == false) {
+        while (!subscription.isClosedForReceive) {
             select<Unit> {
-                subscription?.onReceiveOrClosed {
+                subscription.onReceiveOrClosed {
                     if (it.isClosed) {
                         this@flux.close(it.closeCause)
                     } else {
@@ -27,6 +26,6 @@ fun <E> BroadcastChannel<E>.asFlux(): Flux<E> {
             }
         }
     }.doOnCancel {
-        subscription?.cancel(CancellationException("closed"))
+        subscription.cancel(CancellationException("closed"))
     }
 }
