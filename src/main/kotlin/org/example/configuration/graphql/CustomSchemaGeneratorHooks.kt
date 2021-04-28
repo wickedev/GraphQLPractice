@@ -13,8 +13,8 @@ class DatetimeScalars {
     companion object {
         val Date = GraphQLDate()
         val Duration = GraphQLDuration()
-        val LocalDate = GraphQLLocalDate()
-        val LocalDateTime = GraphQLLocalDateTime()
+        val LocalDate = GraphQLLocalDate(true)
+        val LocalDateTime = GraphQLLocalDateTime(true)
         val LocalTime = GraphQLLocalTime()
         val OffsetDateTime = GraphQLOffsetDateTime()
         val YearMonth = GraphQLYearMonth()
