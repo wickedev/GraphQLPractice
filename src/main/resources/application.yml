@@ -1,6 +1,8 @@
 graphql:
   packages:
     - org.example
+server:
+  port: 8081
 
 spring:
   application:
@@ -13,3 +15,7 @@ spring:
 logging:
   level:
     org.springframework.data.r2dbc: DEBUG
+
+auth:
+  jwt:
+    issuer: graphql-practice-issuer

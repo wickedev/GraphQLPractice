@@ -8,9 +8,6 @@ import reactor.core.publisher.Flux
 
 
 @Repository
-interface R2dbcPostRepository : ReactiveSortingRepository<Post, Identifier> {
+interface PostRepository : ReactiveSortingRepository<Post, Identifier> {
     fun findByAuthorId(authorId: Identifier): Flux<Post>
 }
-
-@Repository
-class PostRepository(repository: R2dbcPostRepository) : R2dbcPostRepository by repository

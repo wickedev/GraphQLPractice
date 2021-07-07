@@ -11,6 +11,7 @@ import org.springframework.data.relational.core.mapping.RelationalPersistentEnti
 import org.springframework.data.relational.core.mapping.RelationalPersistentProperty
 import org.springframework.data.relational.repository.query.RelationalEntityInformation
 import org.springframework.data.repository.core.RepositoryInformation
+import org.springframework.data.repository.core.RepositoryMetadata
 import org.springframework.r2dbc.core.DatabaseClient
 
 typealias MappingContext = org.springframework.data.mapping.context.MappingContext<
@@ -53,12 +54,17 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
         return getEntityInformation(domainClass, null)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun <T, ID> getEntityInformation(
         domainClass: Class<T>,
         information: RepositoryInformation?
     ): RelationalEntityInformation<T, ID> {
         val entity = mappingContext?.getRequiredPersistentEntity(domainClass)
-        return CustomMappingRelationalEntityInformation(entity as RelationalPersistentEntity<T>,additionalIsNewStrategy)
+        @Suppress("UNCHECKED_CAST")
+        return CustomMappingRelationalEntityInformation(
+            entity as RelationalPersistentEntity<T>,
+            additionalIsNewStrategy
+        )
     }
 
     override fun getTargetRepository(information: RepositoryInformation): Any? {
@@ -70,6 +76,10 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
             information, entityInformation,
             operations, converter
         )
+    }
+
+    override fun getRepositoryBaseClass(metadata: RepositoryMetadata): Class<*> {
+        return CustomSimpleR2DbcRepository::class.java
     }
 }
 

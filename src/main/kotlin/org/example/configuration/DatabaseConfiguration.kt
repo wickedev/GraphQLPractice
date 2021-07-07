@@ -52,6 +52,8 @@ class DatabaseConfiguration {
             dialect,
             IDToLongWritingConverter(),
             LongToIDReadingConverter(),
+            StringToRoleReadingConverter(),
+            RoleToStringWritingConverter(),
             OffsetDateTimeToLocalDateTimeWritingConverter(),
             LocalDateTimeToOffsetDateTimeReadingConverter(),
             ZonedDateTimeToLocalDateTimeWritingConverter(),

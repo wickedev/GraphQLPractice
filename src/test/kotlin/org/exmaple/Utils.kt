@@ -109,12 +109,16 @@ class DatabaseContainer(spek: LifecycleAware) {
         }
     }
 
-    fun r2dbcEntityTemplateFacotry(): R2dbcEntityTemplate {
+    fun r2dbcEntityTemplateFactory(): R2dbcEntityTemplate {
         return R2dbcEntityTemplate(connectionFactory)
     }
 
     fun <T> getRepository(repositoryInterface: Class<T>): T {
         return repositoryFactory.getRepository(repositoryInterface)
+    }
+
+    fun <T> getRepository(repositoryInterface: Class<T>, customImplementation: Any): T {
+        return repositoryFactory.getRepository(repositoryInterface, customImplementation)
     }
 
     fun populate(vararg scriptPaths: String) {

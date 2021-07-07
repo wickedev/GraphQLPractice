@@ -12,9 +12,16 @@ data class User(
     @Id val id: Identifier = DEFAULT_ID_VALUE,
     val email: String,
     val name: String?,
+    val hashSalt: String,
+    val role: Role
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(User::class.java)
+    }
+
+    enum class Role {
+        ADMIN,
+        USER;
     }
 
     @Transient
@@ -26,3 +33,14 @@ data class User(
     }*/
 }
 
+
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+operator fun User.Role.compareTo(role: User.Role): Int {
+    return if (this == User.Role.ADMIN && role == User.Role.USER) {
+        1
+    } else if (this == User.Role.USER && role == User.Role.ADMIN) {
+        -1
+    } else {
+        -1
+    }
+}

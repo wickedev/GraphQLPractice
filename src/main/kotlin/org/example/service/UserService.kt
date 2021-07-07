@@ -41,19 +41,19 @@ class UserService(
     suspend fun users(): List<User> {
         log.info("users() called")
 
-        return userRepository.findAll().await()
+        return userRepository.templateFindAll().await()
     }
 
     suspend fun users(ids: List<Identifier>): List<User> {
         log.info("users() called with: ids = $ids")
-
         return userRepository.findAllById(ids).await()
     }
 
     suspend fun createUser(data: UserCreateInput): User {
         log.info("createUser() called with: data = $data")
 
-        val user = userRepository.save(User(email = data.email, name = data.name)).await()
+        val user =
+            userRepository.save(User(email = data.email, name = data.name, hashSalt = "", role = User.Role.USER)).await()
         userCreatedChannel.offer(user)
         return user
     }
@@ -68,6 +68,7 @@ class UserService(
             user.copy(
                 email = if (data.email != null) data.email.set else user.email,
                 name = if (data.name != null) data.name.set else user.name,
+                hashSalt = "",
             )
         ).await()
     }

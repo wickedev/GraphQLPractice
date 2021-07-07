@@ -6,7 +6,7 @@ group = "dev.wickedev.voca"
 version = "0.1.0"
 
 val kotlinCoroutineVersion = "1.4.3"
-val spekVersion = "2.1.0-alpha.0.27+e76356a"
+val spekVersion = "2.0.15"
 val graphQLKotlinVersion = "4.0.0-alpha.17"
 
 plugins {
@@ -44,8 +44,7 @@ ktlint {
 }
 
 repositories {
-    jcenter()
-    maven("https://dl.bintray.com/spekframework/spek-dev/")
+    mavenCentral()
     maven("https://github.com/novonetworks/spring-fu/raw/patch-context/maven-repo")
 }
 
@@ -65,7 +64,7 @@ dependencies {
     /* graphql */
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:4.0.0-alpha.17")
-    implementation("com.graphql-java:graphql-java-extended-scalars:16.0.0")
+    implementation("com.graphql-java:graphql-java-extended-scalars:16.0.1")
     implementation("com.zhokhov.graphql:graphql-java-datetime:4.0.0")
 
     /* database */
@@ -74,10 +73,9 @@ dependencies {
     implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
 
     /* security */
-    implementation("io.jsonwebtoken:jjwt-api:0.11.1")
-    implementation("io.jsonwebtoken:jjwt-impl:0.11.1")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
+    implementation("com.auth0:java-jwt:3.17.0")
     implementation("org.bouncycastle:bcpkix-jdk15on:1.66")
+    implementation("com.google.crypto.tink:tink:1.6.0")
 
     /* testing */
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
@@ -92,9 +90,9 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:2.1.2")
 
     /* testing fixture */
-    testImplementation("com.appmattus.fixture:fixture:1.0.0")
-    testImplementation("com.appmattus.fixture:fixture-generex:1.0.0")
-    testImplementation("com.appmattus.fixture:fixture-javafaker:1.0.0")
+    testImplementation("com.appmattus.fixture:fixture:1.1.0")
+    testImplementation("com.appmattus.fixture:fixture-generex:1.1.0")
+    testImplementation("com.appmattus.fixture:fixture-javafaker:1.1.0")
 }
 
 sourceSets {

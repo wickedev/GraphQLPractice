@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   mariadb:
-    container_name: mariadb_container
+    container_name: graphql_mariadb_container
     image: mariadb:focal
     volumes:
       - mariadb:/var/lib/mysql

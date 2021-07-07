@@ -4,6 +4,7 @@ import org.example.entity.User
 import org.example.service.UserService
 import org.example.util.CoroutineDataLoader
 import org.example.util.Identifier
+import org.example.util.orderBy
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -13,6 +14,6 @@ class AuthorDataLoader(private val service: UserService) : CoroutineDataLoader<I
 
     override suspend fun batchLoad(keys: List<Identifier>): List<User> {
         log.info("batchLoad() called with: ids = $keys")
-        return service.users(keys)
+        return service.users(keys).orderBy(keys) { id }
     }
 }

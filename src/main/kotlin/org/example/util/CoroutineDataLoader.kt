@@ -110,3 +110,7 @@ inline fun <reified L : CoroutineDataLoader<K, V>, K, V> DataFetchingEnvironment
     val loader = BeanUtil.getBean<L>()
     return this.getValueFromDataLoader(loader.dataLoaderName, key)
 }
+
+inline fun <K, E> List<E>.orderBy(keys: List<K>, keyExtractor: E.() -> K): List<E> {
+    return keys.map { k -> find { e -> k == keyExtractor(e) }!! }
+}

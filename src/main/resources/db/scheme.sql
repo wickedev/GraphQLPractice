@@ -3,6 +3,8 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(191) NOT NULL,
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(191),
+    hash_salt VARCHAR(500) NOT NULL,
+    role VARCHAR(191) NOT NULL,
     UNIQUE INDEX user.email_unique(email),
 
     PRIMARY KEY (`id`)

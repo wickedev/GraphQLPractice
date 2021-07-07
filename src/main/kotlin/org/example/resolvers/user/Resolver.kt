@@ -7,6 +7,8 @@ import com.expediagroup.graphql.server.operations.Query
 import com.expediagroup.graphql.server.operations.Subscription
 import graphql.schema.DataFetchingEnvironment
 import org.example.channel.UserCreatedChannel
+import org.example.configuration.graphql.HasRole
+import org.example.configuration.graphql.IsAuthenticated
 import org.example.entity.User
 import org.example.service.UserService
 import org.example.util.asFlux
@@ -20,11 +22,13 @@ class UserQuery(
 ) : Query {
     private val log = LoggerFactory.getLogger(UserQuery::class.java)
 
+    @IsAuthenticated
     suspend fun user(where: UserWhereUniqueInput): User? {
         log.info("user() called with: where = $where")
         return userService.user(where)
     }
 
+    @IsAuthenticated
     suspend fun users(environment: DataFetchingEnvironment): List<User> {
         log.info("users() called")
         return userService.users()
@@ -35,6 +39,7 @@ class UserQuery(
 class UserSubscription(private val userCreatedChannel: UserCreatedChannel) : Subscription {
     private val log = LoggerFactory.getLogger(UserSubscription::class.java)
 
+    @IsAuthenticated
     fun users(): Flux<User> {
         log.info("users() called")
         return userCreatedChannel.asFlux()
@@ -47,16 +52,19 @@ class UserMutation(
 ) : Mutation {
     private val log = LoggerFactory.getLogger(UserMutation::class.java)
 
+    @HasRole(role = User.Role.ADMIN)
     suspend fun createUser(data: UserCreateInput): User {
         log.info("createUser() called with: data = $data")
         return userService.createUser(data)
     }
 
+    @HasRole(role = User.Role.USER)
     suspend fun updateUser(data: UserUpdateInput, where: UserWhereUniqueInput): User? {
         log.info("updateUpdate() called with: data = $data, where = $where")
         return userService.updateUser(data, where)
     }
 
+    @HasRole(role = User.Role.ADMIN)
     suspend fun deleteUser(where: UserWhereUniqueInput): User? {
         log.info("deleteUser() called with: where = $where")
         return userService.deleteUser(where)
