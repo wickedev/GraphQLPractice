@@ -55,7 +55,11 @@ class UserRepositoryTest : Spek({
 
         it("fixture user and templateFindAll are the same") {
             runBlocking {
-                val user = fixture<User>()
+                val user = fixture<User> {
+                    property(User::name) {
+                        ""
+                    }
+                }
                 userRepository.save(user).await()
                 val users = userRepository.templateFindAll().await()
                 users.size.should.be.at.least(1)

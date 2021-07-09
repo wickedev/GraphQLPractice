@@ -2,7 +2,6 @@ package org.example.service
 
 import com.auth0.jwt.interfaces.DecodedJWT
 import org.example.configuration.graphql.AuthenticationError
-import org.example.configuration.graphql.DuplicateNameException
 import org.example.entity.User
 import org.example.repository.UserRepository
 import org.example.util.coroutine.mono.await
@@ -15,6 +14,8 @@ class AuthService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
+    class DuplicateNameException : Exception("DUPLICATE_NAME")
+
     data class LoginResult(
         val accessToken: JwtService.Token,
         val refreshToken: JwtService.Token,
