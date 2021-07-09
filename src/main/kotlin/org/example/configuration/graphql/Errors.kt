@@ -13,3 +13,5 @@ class ForbiddenError : Exception("FORBIDDEN")
 class PersistedQueryNotFoundError : Exception("PERSISTED_QUERY_NOT_FOUND")
 
 class PersistedQueryNotSupportedError : Exception("PERSISTED_QUERY_NOT_SUPPORTED")
+
+class TokenNotExistError : Exception("AUTHORIZATION_TOKEN_NOT_EXIST")

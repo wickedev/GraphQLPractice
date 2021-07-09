@@ -28,7 +28,6 @@ class PostQuery(private val postService: PostService) : Query {
         return postService.post(where)
     }
 
-    @IsAuthenticated
     suspend fun posts(): List<Post> {
         log.info("posts() called")
         return postService.posts()
