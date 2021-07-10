@@ -23,8 +23,6 @@ class DatetimeScalars {
 }
 
 class CustomSchemaGeneratorHooks(override val wiringFactory: KotlinDirectiveWiringFactory) : SchemaGeneratorHooks {
-
-
     override fun willGenerateGraphQLType(type: KType): GraphQLType? {
         return when (type.classifier) {
             // DatetimeScalars

@@ -5,12 +5,12 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 group = "dev.wickedev.voca"
 version = "0.1.0"
 
-val kotlinCoroutineVersion = "1.4.3"
+val kotlinCoroutineVersion = "1.5.1"
 val spekVersion = "2.0.15"
-val graphQLKotlinVersion = "4.0.0-alpha.17"
+val graphQLKotlinVersion = "5.0.0-alpha.0"
 
 plugins {
-    kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.5.10"
     id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
     id("org.springframework.boot") version "2.4.4"
     id("org.jetbrains.kotlin.plugin.spring") version "1.4.31"
@@ -54,6 +54,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutineVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${kotlinCoroutineVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${kotlinCoroutineVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     /* spring */
     implementation("org.springframework.fu:spring-fu-kofu:0.5.0.7-patch-context")
@@ -63,7 +64,7 @@ dependencies {
 
     /* graphql */
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
-    implementation("com.expediagroup:graphql-kotlin-spring-client:4.0.0-alpha.17")
+    implementation("com.expediagroup:graphql-kotlin-spring-client:$graphQLKotlinVersion")
     implementation("com.graphql-java:graphql-java-extended-scalars:16.0.1")
     implementation("com.zhokhov.graphql:graphql-java-datetime:4.0.0")
 
