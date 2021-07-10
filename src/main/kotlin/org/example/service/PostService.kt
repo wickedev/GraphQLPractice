@@ -49,7 +49,7 @@ class PostService(
                 authorId = user?.id
             )
         ).await()
-        postCreatedChannel.offer(post)
+        postCreatedChannel.trySend(post)
         return post
     }
 

@@ -62,7 +62,9 @@ class DatabaseConfiguration {
     }
 
     @Bean
-    fun additionalIsNewStrategy() = CustomAdditionalIsNewStrategy()
+    fun additionalIsNewStrategy(): AdditionalIsNewStrategy {
+        return CustomAdditionalIsNewStrategy()
+    }
 
     @Bean
     fun mappingR2dbcConverter(

@@ -16,6 +16,7 @@ import org.springframework.data.relational.repository.query.RelationalEntityInfo
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.reactive.ReactiveSortingRepository
 import org.springframework.data.util.Lazy
+import org.springframework.data.util.Streamable
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.Assert
@@ -306,6 +307,18 @@ class CustomSimpleR2DbcRepository<T, ID> : ReactiveSortingRepository<T, ID>, Rea
         val idPublisher = Flux.from(objectPublisher) //
             .map { entity: T -> this.entity.getRequiredId(entity) }
         return deleteById(idPublisher)
+    }
+
+    /*
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.reactive.ReactiveCrudRepository#deleteAllById(java.lang.Iterable)
+	 */
+    override fun deleteAllById(ids: Iterable<ID>): Mono<Void> {
+        Assert.notNull(ids, "The iterable of Id's must not be null!")
+        val idsList = Streamable.of(ids).toList()
+        val idProperty = getIdProperty().name
+        return entityOperations.delete(Query.query(Criteria.where(idProperty).`in`(idsList)), entity.javaType)
+            .then()
     }
 
     /* (non-Javadoc)

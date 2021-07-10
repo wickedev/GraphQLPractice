@@ -1,4 +1,4 @@
-import com.palantir.gradle.docker.DockerComposeUp
+// import com.palantir.gradle.docker.DockerComposeUp
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.run.BootRun
 
@@ -10,13 +10,13 @@ val spekVersion = "2.0.15"
 val graphQLKotlinVersion = "5.0.0-alpha.0"
 
 plugins {
-    kotlin("jvm") version "1.5.10"
-    id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
-    id("org.springframework.boot") version "2.4.4"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.4.31"
+    kotlin("jvm") version "1.5.20-RC"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    id("org.springframework.boot") version "2.5.2"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.5.20-RC"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.palantir.docker-compose") version "0.26.0"
-    id("com.expediagroup.graphql") version "3.7.0"
+    id("com.expediagroup.graphql") version "5.0.0-alpha.0"
 }
 
 java {
@@ -111,13 +111,15 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+/*
+### commented until https://github.com/palantir/gradle-docker/issues/452 solved
 tasks.withType<BootRun> {
     dependsOn(tasks.withType<DockerComposeUp>())
 
     systemProperty("spring.profiles.active", "dev")
     systemProperty("spring.devtools.restart.enabled", "true")
     systemProperty("spring.devtools.livereload.enabled", "true")
-}
+}*/
 
 tasks.withType<Test> {
     systemProperty("spring.profiles.active", "test")

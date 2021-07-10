@@ -16,11 +16,11 @@ fun <E> BroadcastChannel<E>.asFlux(): Flux<E> {
     return flux {
         while (!subscription.isClosedForReceive) {
             select<Unit> {
-                subscription.onReceiveOrClosed {
+                subscription.onReceiveCatching {
                     if (it.isClosed) {
-                        this@flux.close(it.closeCause)
+                        this@flux.close(it.exceptionOrNull())
                     } else {
-                        this@flux.offer(it.value)
+                        this@flux.trySend(it.getOrThrow())
                     }
                 }
             }

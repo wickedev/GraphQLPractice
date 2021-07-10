@@ -54,7 +54,7 @@ class UserService(
 
         val user =
             userRepository.save(User(email = data.email, name = data.name, hashSalt = "", role = User.Role.USER)).await()
-        userCreatedChannel.offer(user)
+        userCreatedChannel.trySend(user)
         return user
     }
 
