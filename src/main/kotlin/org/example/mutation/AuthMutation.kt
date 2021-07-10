@@ -25,7 +25,7 @@ class AuthMutation(private val authService: AuthService) : Mutation {
     }
 
     suspend fun refresh(env: DataFetchingEnvironment): AuthService.LoginResult? {
-        val result = authService.refresh(env.getContext<GraphQLCustomContext>().jwt)
+        val result = authService.refresh(env.getContext<GraphQLCustomContext>().accessJWT)
 
         if (result != null) {
             env.getContext<GraphQLCustomContext>().setRefreshToken(result.refreshToken)

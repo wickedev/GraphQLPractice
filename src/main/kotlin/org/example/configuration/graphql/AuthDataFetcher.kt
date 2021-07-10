@@ -15,11 +15,11 @@ class AuthDataFetcher(
         if (environment != null) {
             val context = environment.getContext<GraphQLCustomContext>()
 
-            if (context.jwt == null) {
+            if (context.accessJWT == null) {
                 throw TokenNotExistError()
             }
 
-            if (directiveEnv.isAuthenticated && !authService.isAuthenticated(context.jwt)) {
+            if (directiveEnv.isAuthenticated && !authService.isAuthenticated(context.accessJWT)) {
                 throw AuthenticationError()
             }
 
@@ -28,7 +28,7 @@ class AuthDataFetcher(
             else
                 null
 
-            if (requiredRole is User.Role && !authService.isAuthorized(requiredRole, context.jwt)) {
+            if (requiredRole is User.Role && !authService.isAuthorized(requiredRole, context.accessJWT)) {
                 throw ForbiddenError()
             }
         }
