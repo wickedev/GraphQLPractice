@@ -1,4 +1,4 @@
-package org.example.resolvers.auth
+package org.example.mutation
 
 import com.expediagroup.graphql.server.operations.Mutation
 import graphql.schema.DataFetchingEnvironment
@@ -8,7 +8,7 @@ import org.example.service.AuthService
 import org.springframework.stereotype.Component
 
 @Component
-class Auth(private val authService: AuthService) : Mutation {
+class AuthMutation(private val authService: AuthService) : Mutation {
 
     suspend fun signUp(email: String, name: String, password: String): User {
         return authService.signUp(email, name, password)

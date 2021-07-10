@@ -1,7 +1,5 @@
-package org.example.resolvers.user
+package org.example.input
 
-import org.example.resolvers.common.NullableStringFieldUpdateOperationsInput
-import org.example.resolvers.common.StringFieldUpdateOperationsInput
 import org.example.util.Identifier
 
 

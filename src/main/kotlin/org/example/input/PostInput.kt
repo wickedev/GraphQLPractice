@@ -1,9 +1,5 @@
-package org.example.resolvers.post
+package org.example.input
 
-import org.example.resolvers.common.BoolFieldUpdateOperationsInput
-import org.example.resolvers.common.NullableStringFieldUpdateOperationsInput
-import org.example.resolvers.common.StringFieldUpdateOperationsInput
-import org.example.resolvers.user.UserCreateNestedOneWithoutPostsInput
 import org.example.util.Identifier
 
 data class PostCreateInput(

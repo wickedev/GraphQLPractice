@@ -3,9 +3,9 @@ package org.example.service
 import org.example.channel.UserCreatedChannel
 import org.example.entity.User
 import org.example.repository.UserRepository
-import org.example.resolvers.user.UserCreateInput
-import org.example.resolvers.user.UserUpdateInput
-import org.example.resolvers.user.UserWhereUniqueInput
+import org.example.input.UserCreateInput
+import org.example.input.UserUpdateInput
+import org.example.input.UserWhereUniqueInput
 import org.example.util.Identifier
 import org.example.util.coroutine.flux.await
 import org.example.util.coroutine.mono.await

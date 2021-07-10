@@ -1,4 +1,4 @@
-package org.example.resolvers.common
+package org.example.mutation
 
 import com.expediagroup.graphql.server.operations.Mutation
 import io.r2dbc.spi.ConnectionFactory

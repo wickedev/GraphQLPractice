@@ -38,7 +38,7 @@ class AuthDataFetcher(
 }
 
 private val KotlinFieldDirectiveEnvironment.isAuthenticated: Boolean
-    get() = directive.name == IsAuthenticatedDirectiveName
+    get() = directive.name == IS_AUTHENTICATED_DIRECTIVE_NAME
 
 private val KotlinFieldDirectiveEnvironment.hasRole: Boolean
-    get() = directive.name == HasRoleDirectiveName
+    get() = directive.name == HAS_ROLE_DIRECTIVE_NAME
