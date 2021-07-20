@@ -46,7 +46,7 @@ class AuthService(
 
     suspend fun login(email: String, password: String): LoginResult? {
         val user = userRepository.findByEmail(email).await()
-            ?: throw AuthenticationError()
+            ?: return null
 
         return LoginResult(
             accessToken = jwtService.createToken(user, JwtService.TokenType.Access),
@@ -57,7 +57,7 @@ class AuthService(
     suspend fun refresh(jwt: DecodedJWT?): LoginResult? {
         val user: User = jwtService.getUserId(jwt)?.let {
             userRepository.findById(it).await()
-        } ?: throw AuthenticationError()
+        } ?: return null
 
         return LoginResult(
             accessToken = jwtService.createToken(user, JwtService.TokenType.Access),
