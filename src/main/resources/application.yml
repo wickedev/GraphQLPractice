@@ -14,12 +14,12 @@ spring:
 
 logging:
   level:
+    org.springframework.r2dbc.core: DEBUG
     org.springframework.data.r2dbc: DEBUG
 
 auth:
   jwt:
     issuer: graphql-practice-issuer
-
 
 r2dbc:
   migrate:

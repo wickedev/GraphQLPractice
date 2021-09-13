@@ -3,11 +3,11 @@ package org.example.configuration.r2dbc
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
 import org.springframework.data.relational.repository.support.MappingRelationalEntityInformation
 
-class CustomMappingRelationalEntityInformation<T, I>(
+class CustomMappingRelationalEntityInformation<T, ID>(
     entity: RelationalPersistentEntity<T>,
     private val additionalIsNewStrategy: AdditionalIsNewStrategy?,
 ) :
-    MappingRelationalEntityInformation<T, I>(entity) {
+    MappingRelationalEntityInformation<T, ID>(entity) {
 
     private var valueType: Class<*> = entity.requiredIdProperty.type
 

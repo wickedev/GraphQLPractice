@@ -10,6 +10,7 @@ import org.springframework.data.r2dbc.repository.support.R2dbcRepositoryFactory
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalPersistentProperty
 import org.springframework.data.relational.repository.query.RelationalEntityInformation
+import org.springframework.data.repository.Repository
 import org.springframework.data.repository.core.RepositoryInformation
 import org.springframework.data.repository.core.RepositoryMetadata
 import org.springframework.r2dbc.core.DatabaseClient
@@ -79,7 +80,10 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
     }
 
     override fun getRepositoryBaseClass(metadata: RepositoryMetadata): Class<*> {
-        return CustomSimpleR2DbcRepository::class.java
+        return if (SoftDeleteRepository::class.java.isAssignableFrom(metadata.repositoryInterface))
+            CustomSoftDeleteRepository::class.java
+        else
+            CustomSimpleR2DbcRepository::class.java
     }
 }
 

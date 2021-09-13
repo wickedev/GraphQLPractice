@@ -45,14 +45,11 @@ interface GraphQLRelayRepository<T : Node, ID> {
     fun backwardConnection(last: Int? = null, before: ID? = null): Mono<Connection<T>>
 }
 
-@Transactional(readOnly = true)
-class CustomSimpleR2DbcRepository<T : Node, ID> :
-    ReactiveSortingRepository<T, ID>,
-    ReactiveOrderedSortingRepository<T, ID>,
-    GraphQLRelayRepository<T, ID> {
-    private val entity: RelationalEntityInformation<T, ID>
-    private val entityOperations: R2dbcEntityOperations
-    private val idProperty: Lazy<RelationalPersistentProperty>
+abstract class CustomBaseR2DbcRepository<T : Node, ID> : ReactiveSortingRepository<T, ID>,
+    ReactiveOrderedSortingRepository<T, ID> {
+    protected val entity: RelationalEntityInformation<T, ID>
+    protected val entityOperations: R2dbcEntityOperations
+    protected val idProperty: Lazy<RelationalPersistentProperty>
 
     /**
      * Create a new [SimpleR2dbcRepository].
@@ -125,9 +122,17 @@ class CustomSimpleR2DbcRepository<T : Node, ID> :
         }
     }
 
+    protected fun getIdProperty(): RelationalPersistentProperty {
+        return idProperty.get()
+    }
+
+    protected fun getIdQuery(id: ID): Query {
+        return Query.query(Criteria.where(getIdProperty().name).`is`(id as Any))
+    }
+
     /* (non-Javadoc)
-	 * @see org.springframework.data.repository.reactive.ReactiveCrudRepository#save(S)
-	 */
+     * @see org.springframework.data.repository.reactive.ReactiveCrudRepository#save(S)
+     */
     @Transactional
     override fun <S : T> save(objectToSave: S): Mono<S> {
         Assert.notNull(objectToSave, "Object to save must not be null!")
@@ -345,14 +350,19 @@ class CustomSimpleR2DbcRepository<T : Node, ID> :
     override fun deleteAll(): Mono<Void> {
         return entityOperations.delete(Query.empty(), entity.javaType).then()
     }
+}
 
-    private fun getIdProperty(): RelationalPersistentProperty {
-        return idProperty.get()
-    }
+@Transactional(readOnly = true)
+class CustomSimpleR2DbcRepository<T : Node, ID> : CustomBaseR2DbcRepository<T, ID>, GraphQLRelayRepository<T, ID> {
+    constructor(
+        entity: RelationalEntityInformation<T, ID>, entityOperations: R2dbcEntityOperations,
+        converter: R2dbcConverter
+    ) : super(entity, entityOperations, converter)
 
-    private fun getIdQuery(id: ID): Query {
-        return Query.query(Criteria.where(getIdProperty().name).`is`(id as Any))
-    }
+    constructor(
+        entity: RelationalEntityInformation<T, ID>, databaseClient: DatabaseClient,
+        converter: R2dbcConverter, accessStrategy: ReactiveDataAccessStrategy
+    ) : super(entity, databaseClient, converter, accessStrategy)
 
     override fun forwardConnection(first: Int?, after: ID?): Mono<Connection<T>> {
         var query = if (after == null) Query.query(Criteria.empty()) else Query.query(
