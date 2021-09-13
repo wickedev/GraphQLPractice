@@ -2,6 +2,8 @@
 
 package org.example.configuration.r2dbc
 
+import com.expediagroup.graphql.generator.scalars.ID
+import graphql.relay.*
 import org.reactivestreams.Publisher
 import org.springframework.data.domain.Sort
 import org.springframework.data.r2dbc.convert.R2dbcConverter
@@ -23,16 +25,31 @@ import org.springframework.util.Assert
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
+interface Node {
+    val id: ID
+}
+
 @NoRepositoryBean
-interface ReactiveOrderedSortingRepository<T, ID> : ReactiveSortingRepository<T, ID> {
+interface ReactiveOrderedSortingRepository<T, ID> {
 
     fun findAllById(ids: Iterable<ID>, sort: Sort): Flux<T>
 
     fun findAllById(idStream: Publisher<ID>, sort: Sort): Flux<T>
 }
 
+@NoRepositoryBean
+interface GraphQLRelayRepository<T : Node, ID> {
+
+    fun forwardConnection(first: Int? = null, after: ID? = null): Mono<Connection<T>>
+
+    fun backwardConnection(last: Int? = null, before: ID? = null): Mono<Connection<T>>
+}
+
 @Transactional(readOnly = true)
-class CustomSimpleR2DbcRepository<T, ID> : ReactiveSortingRepository<T, ID>, ReactiveOrderedSortingRepository<T, ID> {
+class CustomSimpleR2DbcRepository<T : Node, ID> :
+    ReactiveSortingRepository<T, ID>,
+    ReactiveOrderedSortingRepository<T, ID>,
+    GraphQLRelayRepository<T, ID> {
     private val entity: RelationalEntityInformation<T, ID>
     private val entityOperations: R2dbcEntityOperations
     private val idProperty: Lazy<RelationalPersistentProperty>
@@ -336,4 +353,86 @@ class CustomSimpleR2DbcRepository<T, ID> : ReactiveSortingRepository<T, ID>, Rea
     private fun getIdQuery(id: ID): Query {
         return Query.query(Criteria.where(getIdProperty().name).`is`(id as Any))
     }
+
+    override fun forwardConnection(first: Int?, after: ID?): Mono<Connection<T>> {
+        var query = if (after == null) Query.query(Criteria.empty()) else Query.query(
+            Criteria.where(getIdProperty().name).greaterThan(after as Any)
+        )
+
+        if (first != null) {
+            query = query.limit(first)
+        }
+
+        return entityOperations.select(query, entity.javaType).toConnection(Sort.Direction.ASC)
+    }
+
+    override fun backwardConnection(last: Int?, before: ID?): Mono<Connection<T>> {
+        var query = if (before == null) Query.query(Criteria.empty()) else Query.query(
+            Criteria.where(getIdProperty().name).lessThan(before as Any)
+        )
+
+        if (last != null) {
+            query = query.limit(last)
+        }
+
+        return entityOperations.select(query, entity.javaType).toConnection(Sort.Direction.DESC)
+    }
+
+    fun findFirst(direction: Sort.Direction): Mono<T> {
+        val idProperty = getIdProperty().name
+        val sort = Sort.by(direction, idProperty)
+
+        return entityOperations.selectOne(
+            Query.empty().sort(sort),
+            entity.javaType
+        )
+    }
+
+    fun findLast(direction: Sort.Direction): Mono<T> {
+        val idProperty = getIdProperty().name
+        val sort = Sort.by(direction.inverted, idProperty)
+
+        return entityOperations.selectOne(
+            Query.empty().sort(sort),
+            entity.javaType
+        )
+    }
+
+    private fun <T : Node> Flux<T>.toConnection(direction: Sort.Direction): Mono<Connection<T>> {
+        return collectList()
+            .zipWith(Mono.zip(findFirst(direction), findLast(direction)) { l, r ->
+                TableCursors(
+                    l.id.value,
+                    r.id.value
+                )
+            }) { l, r -> l to r }
+            .map { (list, cursors) -> list.toConnection(cursors) }
+    }
+}
+
+data class TableCursors(
+    val first: String,
+    val last: String
+)
+
+private val Sort.Direction.inverted: Sort.Direction
+    get() = if (isAscending) Sort.Direction.DESC else Sort.Direction.ASC
+
+private fun <T : Node> List<T>.toConnection(cursors: TableCursors): Connection<T> {
+    val edges = map { node -> DefaultEdge(node, DefaultConnectionCursor(node.id.value)) }
+
+    val firstCursor = edges.first().cursor
+    val lastCursor = edges.last().cursor
+
+    val pageInfo = DefaultPageInfo(
+        firstCursor,
+        lastCursor,
+        cursors.first == firstCursor.value,
+        cursors.last == lastCursor.value
+    )
+
+    return DefaultConnection(
+        edges,
+        pageInfo
+    )
 }

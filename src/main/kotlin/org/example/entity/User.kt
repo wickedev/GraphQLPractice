@@ -1,5 +1,6 @@
 package org.example.entity
 
+import org.example.configuration.r2dbc.Node
 import org.example.util.DEFAULT_ID_VALUE
 import org.example.util.Identifier
 import org.slf4j.LoggerFactory
@@ -9,12 +10,12 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table
 data class User(
-    @Id val id: Identifier = DEFAULT_ID_VALUE,
+    @Id override val id: Identifier = DEFAULT_ID_VALUE,
     val email: String,
     val name: String?,
     val hashSalt: String,
     val role: Role
-) {
+) : Node {
     companion object {
         private val log = LoggerFactory.getLogger(User::class.java)
     }
@@ -31,16 +32,15 @@ data class User(
         log.info("posts() called with: authorId: $id")
         return env.getDataLoader(PostsByAuthorIdDataLoader::class).load(id)
     }*/
-}
 
-
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-operator fun User.Role.compareTo(role: User.Role): Int {
-    return if (this == User.Role.ADMIN && role == User.Role.USER) {
-        1
-    } else if (this == User.Role.USER && role == User.Role.ADMIN) {
-        -1
-    } else {
-        -1
+    @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+    operator fun Role.compareTo(role: Role): Int {
+        return if (this == Role.ADMIN && role == Role.USER) {
+            1
+        } else if (this == Role.USER && role == Role.ADMIN) {
+            -1
+        } else {
+            -1
+        }
     }
 }

@@ -1,4 +1,4 @@
-// import com.palantir.gradle.docker.DockerComposeUp
+import com.palantir.gradle.docker.DockerComposeUp
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.run.BootRun
 
@@ -15,7 +15,7 @@ plugins {
     id("org.springframework.boot") version "2.5.2"
     id("org.jetbrains.kotlin.plugin.spring") version "1.5.20-RC"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.palantir.docker-compose") version "0.26.0"
+    id("com.palantir.docker-compose") version "0.28.0"
     id("com.expediagroup.graphql") version "5.0.0-alpha.0"
 }
 
@@ -72,6 +72,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.mariadb:r2dbc-mariadb:1.0.1")
     implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
+    implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.7.0")
 
     /* security */
     implementation("com.auth0:java-jwt:3.17.0")
@@ -94,6 +95,11 @@ dependencies {
     testImplementation("com.appmattus.fixture:fixture:1.1.0")
     testImplementation("com.appmattus.fixture:fixture-generex:1.1.0")
     testImplementation("com.appmattus.fixture:fixture-javafaker:1.1.0")
+
+
+    testImplementation("io.leangen.geantyref:geantyref:1.3.4")
+    testImplementation("net.jodah:typetools:0.6.3")
+    testImplementation("com.google.guava:guava:30.1.1-jre")
 }
 
 sourceSets {
@@ -111,15 +117,14 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-/*
-### commented until https://github.com/palantir/gradle-docker/issues/452 solved
+// ### commented until https://github.com/palantir/gradle-docker/issues/452 solved
 tasks.withType<BootRun> {
     dependsOn(tasks.withType<DockerComposeUp>())
 
     systemProperty("spring.profiles.active", "dev")
     systemProperty("spring.devtools.restart.enabled", "true")
     systemProperty("spring.devtools.livereload.enabled", "true")
-}*/
+}
 
 tasks.withType<Test> {
     systemProperty("spring.profiles.active", "test")

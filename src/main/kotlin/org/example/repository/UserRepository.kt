@@ -8,6 +8,7 @@ import org.springframework.data.r2dbc.convert.MappingR2dbcConverter
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.repository.Query
 import org.springframework.data.relational.core.query.Query.empty
+import org.springframework.data.repository.reactive.ReactiveSortingRepository
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
@@ -20,7 +21,8 @@ interface CustomUserRepository {
 }
 
 @Repository
-interface UserRepository : ReactiveOrderedSortingRepository<User, Identifier>, CustomUserRepository {
+interface UserRepository : ReactiveOrderedSortingRepository<User, Identifier>,
+    ReactiveSortingRepository<User, Identifier>,CustomUserRepository {
     fun findByEmail(email: String): Mono<User?>
 
     fun existsByEmail(email: String): Mono<Boolean>

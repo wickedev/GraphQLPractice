@@ -19,3 +19,8 @@ logging:
 auth:
   jwt:
     issuer: graphql-practice-issuer
+
+
+r2dbc:
+  migrate:
+    resourcesPath: classpath:/db/migration/*.sql

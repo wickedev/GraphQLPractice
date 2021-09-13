@@ -12,6 +12,7 @@ import org.example.util.coroutine.mono.await
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
 
 @Service
 class PostService(
@@ -74,8 +75,10 @@ class PostService(
         log.info("deletePost() called with: where = $where")
 
         val post = postRepository.findById(where.id).await()
-            ?: null
+            ?: return null
+
         postRepository.deleteById(where.id).await()
-        return post
+
+        return post.copy(deletedAt = ZonedDateTime.now())
     }
 }
