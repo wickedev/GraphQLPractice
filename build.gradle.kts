@@ -43,12 +43,23 @@ ktlint {
     }
 }
 
+graphql {
+    schema {
+        packages = listOf(
+            "org.example",
+            "java.time",
+        )
+    }
+}
+
 repositories {
     mavenCentral()
     maven("https://github.com/novonetworks/spring-fu/raw/patch-context/maven-repo")
 }
 
 dependencies {
+    graphqlSDL(project(":"))
+
     /* kotlin */
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutineVersion}")
@@ -65,6 +76,7 @@ dependencies {
     /* graphql */
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:$graphQLKotlinVersion")
+    implementation("com.expediagroup:graphql-kotlin-hooks-provider:$graphQLKotlinVersion")
     implementation("com.graphql-java:graphql-java-extended-scalars:16.0.1")
     implementation("com.zhokhov.graphql:graphql-java-datetime:4.0.0")
 

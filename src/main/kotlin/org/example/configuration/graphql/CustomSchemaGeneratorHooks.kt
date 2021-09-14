@@ -2,6 +2,7 @@ package org.example.configuration.graphql
 
 import com.expediagroup.graphql.generator.directives.KotlinDirectiveWiringFactory
 import com.expediagroup.graphql.generator.hooks.SchemaGeneratorHooks
+import com.expediagroup.graphql.plugin.schema.hooks.SchemaGeneratorHooksProvider
 import com.zhokhov.graphql.datetime.*
 import graphql.scalars.ExtendedScalars
 import graphql.schema.GraphQLType
@@ -22,7 +23,7 @@ class DatetimeScalars {
     }
 }
 
-class CustomSchemaGeneratorHooks(override val wiringFactory: KotlinDirectiveWiringFactory) : SchemaGeneratorHooks {
+class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
     override fun willGenerateGraphQLType(type: KType): GraphQLType? {
         return when (type.classifier) {
             // DatetimeScalars

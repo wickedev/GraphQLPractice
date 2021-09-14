@@ -29,9 +29,7 @@ class GraphQLConfiguration {
     @Bean
     fun graphQLContextFactory(jwtService: JwtService) = GraphQLCustomContextFactory(jwtService)
 
-
     @Bean
-    fun customSchemaGeneratorHooks(wiringFactory: KotlinDirectiveWiringFactory) =
-        CustomSchemaGeneratorHooks(wiringFactory)
+    fun customSchemaGeneratorHooks() = CustomSchemaGeneratorHooks()
 }
 
