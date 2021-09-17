@@ -6,5 +6,5 @@ import com.expediagroup.graphql.plugin.schema.hooks.SchemaGeneratorHooksProvider
 
 @Suppress("unused")
 class CustomSchemaGeneratorHooksProvider : SchemaGeneratorHooksProvider {
-    override fun hooks(): SchemaGeneratorHooks = CustomSchemaGeneratorHooks()
+    override fun hooks(): SchemaGeneratorHooks = CustomSchemaGeneratorHooks(emptyList())
 }

@@ -1,7 +1,9 @@
 package org.example.entity
 
+import com.expediagroup.graphql.generator.federation.directives.FieldSet
+import com.expediagroup.graphql.generator.federation.directives.KeyDirective
 import graphql.schema.DataFetchingEnvironment
-import org.example.configuration.r2dbc.Node
+import org.example.configuration.repository.interfaces.Node
 import org.example.dataloader.AuthorDataLoader
 import org.example.util.DEFAULT_ID_VALUE
 import org.example.util.Identifier
@@ -13,6 +15,7 @@ import java.time.ZonedDateTime
 import java.util.concurrent.CompletableFuture
 
 @Table
+@KeyDirective(fields = FieldSet("id"))
 data class Post(
     @Id override val id: Identifier = DEFAULT_ID_VALUE,
     val authorId: Identifier? = null,
@@ -21,7 +24,7 @@ data class Post(
     val postedAt: ZonedDateTime = ZonedDateTime.now(),
     val deletedAt: ZonedDateTime? = null,
     val published: Boolean = false,
-): Node {
+) : Node {
     companion object {
         private val log = LoggerFactory.getLogger(Post::class.java)
     }

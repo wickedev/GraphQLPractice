@@ -1,6 +1,6 @@
 package org.example.entity
 
-import org.example.configuration.r2dbc.Node
+import org.example.configuration.repository.interfaces.Node
 import org.example.util.DEFAULT_ID_VALUE
 import org.example.util.Identifier
 import org.slf4j.LoggerFactory

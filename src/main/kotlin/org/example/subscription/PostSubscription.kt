@@ -1,6 +1,7 @@
 package org.example.subscription
 
 import com.expediagroup.graphql.server.operations.Subscription
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.example.channel.PostCreatedChannel
 import org.example.configuration.graphql.IsAuthenticated
 import org.example.entity.Post
@@ -14,6 +15,7 @@ import reactor.core.publisher.Flux
 class PostSubscription(private val postCreatedChannel: PostCreatedChannel) : Subscription {
     private val log = LoggerFactory.getLogger(PostSubscription::class.java)
 
+    @OptIn(ObsoleteCoroutinesApi::class)
     @IsAuthenticated
     fun posts(): Flux<Post> {
         log.info("posts() called")

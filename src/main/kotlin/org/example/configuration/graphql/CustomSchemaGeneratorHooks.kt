@@ -1,15 +1,17 @@
 package org.example.configuration.graphql
 
-import com.expediagroup.graphql.generator.directives.KotlinDirectiveWiringFactory
+import com.expediagroup.graphql.generator.federation.FederatedSchemaGeneratorHooks
+import com.expediagroup.graphql.generator.federation.execution.FederatedTypeResolver
 import com.expediagroup.graphql.generator.hooks.SchemaGeneratorHooks
-import com.expediagroup.graphql.plugin.schema.hooks.SchemaGeneratorHooksProvider
 import com.zhokhov.graphql.datetime.*
 import graphql.scalars.ExtendedScalars
 import graphql.schema.GraphQLType
+import org.springframework.data.annotation.Id
 import java.net.URL
 import java.time.*
 import java.util.*
 import kotlin.reflect.KType
+import kotlin.reflect.full.findAnnotation
 
 class DatetimeScalars {
     companion object {
@@ -23,7 +25,9 @@ class DatetimeScalars {
     }
 }
 
-class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
+class CustomSchemaGeneratorHooks(resolvers: List<FederatedTypeResolver<*>>) :
+    FederatedSchemaGeneratorHooks(resolvers) {
+
     override fun willGenerateGraphQLType(type: KType): GraphQLType? {
         return when (type.classifier) {
             // DatetimeScalars
@@ -40,7 +44,7 @@ class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
             OffsetTime::class -> ExtendedScalars.Time
             URL::class -> ExtendedScalars.Url
             Locale::class -> ExtendedScalars.Locale
-            else -> null
+            else -> super.willGenerateGraphQLType(type)
         }
     }
 }

@@ -2,6 +2,14 @@
 
 package org.example.configuration.r2dbc
 
+import org.example.configuration.repository.common.InvalidRepositoryImplementationException
+import org.example.configuration.repository.common.SimpleGraphQLRelayNodeRepository
+import org.example.configuration.repository.common.isAssignableFrom
+import org.example.configuration.repository.interfaces.GraphQLRelayNodeRepository
+import org.example.configuration.repository.interfaces.SoftDeleteRepository
+import org.example.configuration.repository.simple.SimpleR2DbcRepository
+import org.example.configuration.repository.softdelete.SoftDeleteR2DbcRepository
+import org.springframework.core.NestedRuntimeException
 import org.springframework.data.r2dbc.convert.R2dbcConverter
 import org.springframework.data.r2dbc.core.R2dbcEntityOperations
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
@@ -13,7 +21,9 @@ import org.springframework.data.relational.repository.query.RelationalEntityInfo
 import org.springframework.data.repository.Repository
 import org.springframework.data.repository.core.RepositoryInformation
 import org.springframework.data.repository.core.RepositoryMetadata
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
 import org.springframework.r2dbc.core.DatabaseClient
+import kotlin.reflect.KClass
 
 typealias MappingContext = org.springframework.data.mapping.context.MappingContext<
     out RelationalPersistentEntity<*>?,
@@ -21,9 +31,9 @@ typealias MappingContext = org.springframework.data.mapping.context.MappingConte
     >
 
 class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
-    private var mappingContext: MappingContext? = null
-    private var converter: R2dbcConverter? = null
-    private var operations: R2dbcEntityOperations? = null
+    private val mappingContext: MappingContext
+    private val converter: R2dbcConverter
+    private val operations: R2dbcEntityOperations
     private val additionalIsNewStrategy: AdditionalIsNewStrategy?
 
     constructor(
@@ -35,7 +45,7 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
         dataAccessStrategy
     ) {
         this.converter = dataAccessStrategy.converter
-        this.mappingContext = converter?.mappingContext
+        this.mappingContext = converter.mappingContext
         this.operations = R2dbcEntityTemplate(databaseClient, dataAccessStrategy)
         this.additionalIsNewStrategy = additionalIsNewStrategy
     }
@@ -46,7 +56,7 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
     ) : super(operations) {
         val dataAccessStrategy = operations.dataAccessStrategy
         this.converter = dataAccessStrategy.converter
-        this.mappingContext = converter?.mappingContext
+        this.mappingContext = converter.mappingContext
         this.operations = operations
         this.additionalIsNewStrategy = additionalIsNewStrategy
     }
@@ -60,7 +70,7 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
         domainClass: Class<T>,
         information: RepositoryInformation?
     ): RelationalEntityInformation<T, ID> {
-        val entity = mappingContext?.getRequiredPersistentEntity(domainClass)
+        val entity = mappingContext.getRequiredPersistentEntity(domainClass)
         @Suppress("UNCHECKED_CAST")
         return CustomMappingRelationalEntityInformation(
             entity as RelationalPersistentEntity<T>,
@@ -80,10 +90,23 @@ class CustomSimpleR2dbcRepositoryFactory : R2dbcRepositoryFactory {
     }
 
     override fun getRepositoryBaseClass(metadata: RepositoryMetadata): Class<*> {
-        return if (SoftDeleteRepository::class.java.isAssignableFrom(metadata.repositoryInterface))
-            CustomSoftDeleteRepository::class.java
+        val repositoryInterface = metadata.repositoryInterface
+        val isGraphQLRelayNodeRepository =
+            GraphQLRelayNodeRepository::class.isAssignableFrom(repositoryInterface)
+        val isEntityRepository = Repository::class.isAssignableFrom(repositoryInterface)
+        val isSoftDeleteRepository = SoftDeleteRepository::class.isAssignableFrom(repositoryInterface)
+        val isQueryByExample = ReactiveQueryByExampleExecutor::class.isAssignableFrom(repositoryInterface)
+
+        if (isSoftDeleteRepository and isQueryByExample) {
+            val msg = "SoftDeleteRepository and ReactiveQueryByExampleExecutor cannot both be implemented"
+            throw InvalidRepositoryImplementationException(msg)
+        }
+
+        return if (isGraphQLRelayNodeRepository and !isEntityRepository)
+            SimpleGraphQLRelayNodeRepository::class.java
+        else if (isSoftDeleteRepository)
+            SoftDeleteR2DbcRepository::class.java
         else
-            CustomSimpleR2DbcRepository::class.java
+            SimpleR2DbcRepository::class.java
     }
 }
-

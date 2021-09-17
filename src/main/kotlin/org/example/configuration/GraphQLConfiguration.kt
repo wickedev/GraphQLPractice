@@ -1,12 +1,13 @@
 package org.example.configuration
 
-import com.expediagroup.graphql.generator.directives.KotlinDirectiveWiringFactory
+import com.expediagroup.graphql.generator.federation.execution.FederatedTypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.example.configuration.graphql.*
 import org.example.service.AuthService
 import org.example.service.JwtService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.*
 
 
 @Configuration
@@ -30,6 +31,7 @@ class GraphQLConfiguration {
     fun graphQLContextFactory(jwtService: JwtService) = GraphQLCustomContextFactory(jwtService)
 
     @Bean
-    fun customSchemaGeneratorHooks() = CustomSchemaGeneratorHooks()
+    fun customSchemaGeneratorHooks(resolvers: Optional<List<FederatedTypeResolver<*>>>) =
+        CustomSchemaGeneratorHooks(resolvers.orElse(emptyList()))
 }
 

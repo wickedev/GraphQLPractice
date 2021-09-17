@@ -1,8 +1,15 @@
 graphql:
   packages:
     - org.example
+  federation:
+    enabled: true
+    tracing:
+      enabled: true
+  voyager:
+    enabled: true
+
 server:
-  port: 8081
+  port: 8080
 
 spring:
   application:
@@ -24,3 +31,5 @@ auth:
 r2dbc:
   migrate:
     resourcesPath: classpath:/db/migration/*.sql
+
+

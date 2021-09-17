@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.exmaple
 
 import com.appmattus.kotlinfixture.decorator.fake.javafaker.javaFakerStrategy
@@ -5,6 +7,7 @@ import com.appmattus.kotlinfixture.kotlinFixture
 import com.github.javafaker.Faker
 import io.r2dbc.spi.Closeable
 import io.r2dbc.spi.ConnectionFactories
+import io.r2dbc.spi.ConnectionFactory
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.runBlocking
 import org.example.configuration.*
@@ -16,20 +19,16 @@ import org.example.entity.User
 import org.example.util.DEFAULT_ID_VALUE
 import org.example.util.DefaultExtendedDatabaseClient
 import org.spekframework.spek2.dsl.LifecycleAware
-import org.springframework.core.convert.converter.Converter
 import org.springframework.core.io.ClassPathResource
-import org.springframework.data.convert.CustomConversions
-import org.springframework.data.r2dbc.convert.MappingR2dbcConverter
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.dialect.DialectResolver
+import org.springframework.data.r2dbc.dialect.R2dbcDialect
 import org.springframework.data.r2dbc.mapping.R2dbcMappingContext
-import org.springframework.data.r2dbc.repository.support.R2dbcRepositoryFactory
 import org.springframework.data.relational.core.mapping.NamingStrategy
 import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator
 import org.springframework.r2dbc.core.DatabaseClient
-import java.util.ArrayList
 
 val faker = Faker()
 val fixture = kotlinFixture {
@@ -39,16 +38,17 @@ val fixture = kotlinFixture {
     }
 }
 
+@Suppress("MemberVisibilityCanBePrivate")
 class DatabaseContainer(spek: LifecycleAware) {
     private var created = false
 
-    val connectionFactory = ConnectionFactories.get("r2dbc:tc:mariadb:///test?TC_IMAGE_TAG=focal")
+    val connectionFactory: ConnectionFactory = ConnectionFactories.get("r2dbc:tc:mariadb:///test?TC_IMAGE_TAG=focal")
 
-    val dialect = DialectResolver.getDialect(connectionFactory)
+    val dialect: R2dbcDialect = DialectResolver.getDialect(connectionFactory)
 
     val additionalIsNewStrategy by spek.memoized { CustomAdditionalIsNewStrategy() }
 
-    val conversions by spek.memoized {
+    val conversions: R2dbcCustomConversions by spek.memoized {
         R2dbcCustomConversions.of(
             dialect,
             IDToLongWritingConverter(),
@@ -70,7 +70,7 @@ class DatabaseContainer(spek: LifecycleAware) {
         CustomMappingR2dbcConverter(mappingContext, conversions, additionalIsNewStrategy)
     }
 
-    val databaseClient by spek.memoized {
+    val databaseClient: DatabaseClient by spek.memoized {
         DatabaseClient.create(connectionFactory)
     }
 

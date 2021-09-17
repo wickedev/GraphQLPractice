@@ -1,6 +1,6 @@
 package org.example.repository
 
-import org.example.configuration.r2dbc.ReactiveOrderedSortingRepository
+import org.example.configuration.repository.interfaces.ReactiveOrderedSortingRepository
 import org.example.entity.User
 import org.example.util.Identifier
 import org.example.util.writeValue
