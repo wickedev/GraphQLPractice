@@ -16,7 +16,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.5.30"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.palantir.docker-compose") version "0.28.0"
-    id("com.expediagroup.graphql") version "5.0.0-alpha.0"
+    id("com.expediagroup.graphql") version "5.0.0-alpha.4"
 }
 
 java {
