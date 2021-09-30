@@ -65,12 +65,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutineVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${kotlinCoroutineVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${kotlinCoroutineVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     /* spring */
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.security:spring-security-crypto")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("io.projectreactor:reactor-tools")
 
     /* graphql */
     api("com.graphql-java:graphql-java:16.1")
