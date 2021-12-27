@@ -5,24 +5,18 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 group = "dev.wickedev.voca"
 version = "0.1.0"
 
-val kotlinCoroutineVersion = "1.5.2-native-mt"
+val kotlinCoroutineVersion = "1.6.0-RC2"
 val spekVersion = "2.0.17"
-val graphQLKotlinVersion = "5.0.0-alpha.0"
+val graphQLKotlinVersion = "5.3.1"
 
 plugins {
-    kotlin("jvm") version "1.5.30"
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-    id("org.springframework.boot") version "2.5.4"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.5.30"
+    kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.6.10"
+    id("org.springframework.boot") version "2.6.1"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("com.palantir.docker-compose") version "0.28.0"
-    id("com.expediagroup.graphql") version "5.0.0-alpha.4"
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
+    id("com.expediagroup.graphql") version "5.3.1"
 }
 
 ktlint {
@@ -54,7 +48,7 @@ graphql {
 
 repositories {
     mavenCentral()
-    maven("https://github.com/novonetworks/spring-fu/raw/patch-context/maven-repo")
+    maven("https://github.com/wickedev/graphql-jetpack/raw/deploy/maven-repo")
 }
 
 dependencies {
@@ -75,26 +69,25 @@ dependencies {
     implementation("io.projectreactor:reactor-tools")
 
     /* graphql */
-    api("com.graphql-java:graphql-java:16.1")
+    api("com.graphql-java:graphql-java:17.3")
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-hooks-provider:$graphQLKotlinVersion")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("com.graphql-java:graphql-java-extended-scalars:16.0.1")
-    implementation("com.zhokhov.graphql:graphql-java-datetime:4.0.0")
+    implementation("com.graphql-java:graphql-java-extended-scalars:17.0")
+    implementation("com.zhokhov.graphql:graphql-java-datetime:4.1.0")
 
-    runtimeOnly("com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-webflux:11.1.0")
-    runtimeOnly("com.graphql-java-kickstart:graphql-kickstart-spring-boot-starter-tools:11.1.0")
+    runtimeOnly("com.graphql-java-kickstart:graphiql-spring-boot-starter:11.1.0")
     runtimeOnly("com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0")
 
     /* database */
-    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    // implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.1.5")
     implementation("org.mariadb:r2dbc-mariadb:1.0.2")
-    implementation("dev.miku:r2dbc-mysql:0.8.2.RELEASE")
-    implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.7.0")
+    implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.8.0")
 
     /* security */
-    implementation("com.auth0:java-jwt:3.18.1")
+    implementation("com.auth0:java-jwt:3.18.2")
     implementation("org.bouncycastle:bcpkix-jdk15on:1.69")
     implementation("com.google.crypto.tink:tink:1.6.1")
 
@@ -103,22 +96,20 @@ dependencies {
     testImplementation("com.winterbe:expekt:0.5.0")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
     testRuntimeOnly("org.jetbrains.kotlin:kotlin-reflect")
-    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.mockk:mockk:1.12.1")
 
     /* testing testcontainers */
-    testImplementation("org.testcontainers:mariadb:1.16.0")
-    testImplementation("org.testcontainers:r2dbc:1.16.0")
+    testImplementation("org.testcontainers:mariadb:1.16.2")
+    testImplementation("org.testcontainers:r2dbc:1.16.2")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:2.7.3")
 
     /* testing fixture */
-    testImplementation("com.appmattus.fixture:fixture:1.1.0")
-    testImplementation("com.appmattus.fixture:fixture-generex:1.1.0")
-    testImplementation("com.appmattus.fixture:fixture-javafaker:1.1.0")
-
-
-    testImplementation("io.leangen.geantyref:geantyref:1.3.11")
+    testImplementation("com.appmattus.fixture:fixture:1.2.0")
+    testImplementation("com.appmattus.fixture:fixture-generex:1.2.0")
+    testImplementation("com.appmattus.fixture:fixture-javafaker:1.2.0")
+    testImplementation("io.leangen.geantyref:geantyref:1.3.13")
     testImplementation("net.jodah:typetools:0.6.3")
-    testImplementation("com.google.guava:guava:30.1.1-jre")
+    testImplementation("com.google.guava:guava:31.0.1-jre")
 }
 
 sourceSets {

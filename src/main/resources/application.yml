@@ -1,12 +1,18 @@
 graphql:
   packages:
     - org.example
+    - io.github.wickedev.graphql
   federation:
     enabled: true
     tracing:
       enabled: true
   voyager:
     enabled: true
+  graphiql:
+    enabled: true
+
+graphiql:
+  enabled: true
 
 server:
   port: 8080
