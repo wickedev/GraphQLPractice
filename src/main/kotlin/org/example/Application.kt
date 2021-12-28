@@ -17,5 +17,5 @@ class Application
 fun main(args: Array<String>) {
     ReactorDebugAgent.init()
     DebugProbes.enableCreationStackTraces = true
-    runApplication<Application>(*args, "--debug")
+    runApplication<Application>(*args)
 }

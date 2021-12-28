@@ -12,7 +12,6 @@ class CustomSchemaGeneratorHooks(
 ) :
     FederatedSchemaGeneratorHooks(resolvers) {
 
-
     override fun willGenerateGraphQLType(type: KType): GraphQLType? {
         return when (true) {
             customScalars.exists(type.classifier) -> customScalars.typeToGraphQLType(type.classifier)

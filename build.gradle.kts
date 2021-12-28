@@ -82,7 +82,7 @@ dependencies {
 
     /* database */
     // implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.1.5")
+    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.1.6")
     implementation("org.mariadb:r2dbc-mariadb:1.0.2")
     implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.8.0")
 

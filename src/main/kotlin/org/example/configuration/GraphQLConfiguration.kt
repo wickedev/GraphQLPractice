@@ -1,12 +1,15 @@
 package org.example.configuration
 
 import com.expediagroup.graphql.generator.federation.execution.FederatedTypeResolver
+import com.zhokhov.graphql.datetime.LocalDateTimeScalar
 import io.github.wickedev.graphql.scalars.CustomScalars
 import io.github.wickedev.graphql.scalars.GraphQLIDScalar
 import io.github.wickedev.graphql.types.ID
 import org.example.configuration.graphql.CustomSchemaGeneratorHooks
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -16,7 +19,8 @@ class GraphQLConfiguration {
     @Bean
     fun customScalars(): CustomScalars {
         return CustomScalars.of(
-            ID::class to GraphQLIDScalar
+            ID::class to GraphQLIDScalar,
+            LocalDateTime::class to LocalDateTimeScalar.create(null, true, DateTimeFormatter.ISO_OFFSET_DATE_TIME),
         )
     }
 
