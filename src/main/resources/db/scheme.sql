@@ -1,26 +1,21 @@
 -- CreateTable
-CREATE TABLE IF NOT EXISTS user (
-    email VARCHAR(191) NOT NULL,
-    id BIGINT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(191) UNIQUE NOT NULL,
     name VARCHAR(191),
     hash_salt VARCHAR(500) NOT NULL,
-    role VARCHAR(191) NOT NULL,
-    UNIQUE INDEX user.email_unique(email),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    roles VARCHAR(16)[]
+);
 
 -- CreateTable
 CREATE TABLE IF NOT EXISTS post (
-    author_id BIGINT,
+    id BIGSERIAL PRIMARY KEY,
     content VARCHAR(191),
-    id BIGINT NOT NULL AUTO_INCREMENT,
     published BOOLEAN NOT NULL DEFAULT false,
     title VARCHAR(191) NOT NULL,
     posted_at TIMESTAMP NOT NULL,
-
-    PRIMARY KEY (id)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    author_id BIGINT NOT NULL
+);
 
 -- AddForeignKey
-ALTER TABLE post ADD FOREIGN KEY (author_id) REFERENCES user(id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE post ADD FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE;

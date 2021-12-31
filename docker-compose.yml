@@ -1,20 +1,19 @@
 version: '3.9'
 
 services:
-  mariadb:
-    container_name: graphql_mariadb_container
-    image: mariadb:focal
+  postgres:
+    container_name: graphql_postgres_container
+    image: postgres:bullseye
     volumes:
-      - mariadb:/var/lib/mysql
+      - postgres:/var/lib/postgresql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-admin}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-blog}
-      MYSQL_USER: ${MYSQL_USER:-admin}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-admin}
-    ports:
-      - "13306:3306"
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      POSTGRES_DB: ${MYSQL_DATABASE:-blog}
     networks:
       - database
+    ports:
+      - "15432:5432"
     restart: always
 
 networks:
@@ -22,4 +21,4 @@ networks:
     driver: bridge
 
 volumes:
-  mariadb:
+  postgres:

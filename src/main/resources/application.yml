@@ -21,7 +21,7 @@ spring:
   application:
     name: blog
   r2dbc:
-    url: r2dbc:mariadb://127.0.0.1:13306/blog
+    url: r2dbc:postgres://127.0.0.1:15432/blog
     username: admin
     password: admin
 

@@ -5,7 +5,7 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 group = "dev.wickedev.voca"
 version = "0.1.0"
 
-val kotlinCoroutineVersion = "1.6.0-RC2"
+val kotlinCoroutineVersion = "1.6.0"
 val spekVersion = "2.0.17"
 val graphQLKotlinVersion = "5.3.1"
 
@@ -81,12 +81,13 @@ dependencies {
     runtimeOnly("com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0")
 
     /* database */
-    // implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
-    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.1.6")
-    implementation("org.mariadb:r2dbc-mariadb:1.0.2")
+    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.2.0")
+    api("io.r2dbc:r2dbc-spi:0.9.0.RELEASE")
+    implementation("org.postgresql:r2dbc-postgresql:0.9.0.RC1")
     implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.8.0")
 
     /* security */
+    implementation("io.github.wickedev:graphql-kotlin-spring-security:0.2.0")
     implementation("com.auth0:java-jwt:3.18.2")
     implementation("org.bouncycastle:bcpkix-jdk15on:1.69")
     implementation("com.google.crypto.tink:tink:1.6.1")

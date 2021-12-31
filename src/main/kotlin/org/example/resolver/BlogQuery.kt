@@ -23,7 +23,7 @@ class BlogQuery(
             .thenApply { UserConnect(it.edges.map { e -> UserEdge(e.node, e.cursor) }, it.pageInfo) }
     }
 
-    fun postes(last: Int?, before: ID?, env: DataFetchingEnvironment): CompletableFuture<PostConnect> {
+    fun posts(last: Int?, before: ID?, env: DataFetchingEnvironment): CompletableFuture<PostConnect> {
         return postRepository.findAllBackwardConnectById(last, before, env)
             .thenApply { PostConnect(it.edges.map { e -> PostEdge(e.node, e.cursor) }, it.pageInfo) }
     }
