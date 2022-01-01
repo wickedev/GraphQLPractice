@@ -10,11 +10,11 @@ data class PostCreateInput(
 )
 
 data class PostUpdateInput(
+    val title: StringFieldUpdateOperationsInput?,
     val content: NullableStringFieldUpdateOperationsInput?,
     val published: BoolFieldUpdateOperationsInput?,
-    val title: StringFieldUpdateOperationsInput?
 )
 
 data class PostWhereUniqueInput(
-    val id: ID?
+    val id: ID
 )

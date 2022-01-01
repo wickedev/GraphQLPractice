@@ -6,6 +6,7 @@ import io.github.wickedev.graphql.scalars.CustomScalars
 import io.github.wickedev.graphql.scalars.GraphQLIDScalar
 import io.github.wickedev.graphql.types.ID
 import org.example.configuration.graphql.CustomSchemaGeneratorHooks
+import org.example.scalars.CollectionScalar
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.time.LocalDateTime
@@ -20,6 +21,7 @@ class GraphQLConfiguration {
     fun customScalars(): CustomScalars {
         return CustomScalars.of(
             ID::class to GraphQLIDScalar,
+            Collection::class to CollectionScalar,
             LocalDateTime::class to LocalDateTimeScalar.create(null, true, DateTimeFormatter.ISO_OFFSET_DATE_TIME),
         )
     }

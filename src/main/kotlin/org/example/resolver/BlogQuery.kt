@@ -2,7 +2,10 @@ package org.example.resolver
 
 import com.expediagroup.graphql.server.operations.Query
 import graphql.schema.DataFetchingEnvironment
+import io.github.wickedev.graphql.interfases.Node
+import io.github.wickedev.graphql.repository.GraphQLNodeRepository
 import io.github.wickedev.graphql.types.ID
+import kotlinx.coroutines.future.await
 import org.example.repository.PostRepository
 import org.example.repository.UserRepository
 import org.example.types.PostConnect
@@ -16,7 +19,12 @@ import java.util.concurrent.CompletableFuture
 class BlogQuery(
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
+    private val nodeRepository: GraphQLNodeRepository,
 ) : Query {
+
+    suspend fun node(id: ID, env: DataFetchingEnvironment): Node? {
+        return nodeRepository.findNodeById(id, env).await()
+    }
 
     fun users(last: Int?, before: ID?, env: DataFetchingEnvironment): CompletableFuture<UserConnect> {
         return userRepository.findAllBackwardConnectById(last, before, env)
@@ -28,4 +36,3 @@ class BlogQuery(
             .thenApply { PostConnect(it.edges.map { e -> PostEdge(e.node, e.cursor) }, it.pageInfo) }
     }
 }
-

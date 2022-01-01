@@ -15,6 +15,7 @@ import org.springframework.data.relational.core.query.Criteria.where
 import org.springframework.data.relational.core.query.Update
 import org.springframework.data.relational.core.sql.SqlIdentifier.quoted
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UserMutation(
@@ -33,6 +34,7 @@ class UserMutation(
         )).await()
     }
 
+    @Transactional
     @Auth(requires = ["ROLE_USER"])
     suspend fun updateUser(where: UserWhereUniqueInput, data: UserUpdateInput): User? {
         log.info("updateUser() called with: where = $where, data = $data")

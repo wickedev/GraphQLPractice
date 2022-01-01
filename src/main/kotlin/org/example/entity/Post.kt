@@ -13,12 +13,13 @@ import java.util.concurrent.CompletableFuture
 
 data class Post(
     @Id
-    override val id: ID,
+    override val id: ID = ID.Empty,
 
     val title: String,
     val content: String?,
     val published: Boolean,
     val postedAt: LocalDateTime,
+    val deletedAt: LocalDateTime? = null,
 
     @Relation(User::class) val authorId: ID,
 
