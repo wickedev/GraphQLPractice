@@ -18,5 +18,4 @@ class CustomSchemaGeneratorHooks(
             else -> super.willGenerateGraphQLType(type)
         }
     }
-
 }
