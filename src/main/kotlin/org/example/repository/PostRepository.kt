@@ -2,6 +2,8 @@ package org.example.repository
 
 import graphql.schema.DataFetchingEnvironment
 import io.github.wickedev.graphql.spring.data.r2dbc.repository.interfaces.GraphQLR2dbcRepository
+import io.github.wickedev.graphql.types.Backward
+import io.github.wickedev.graphql.types.Connection
 import io.github.wickedev.graphql.types.ID
 import org.example.entity.Post
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
@@ -15,7 +17,7 @@ import java.util.concurrent.CompletableFuture
 
 @Repository
 interface PostRepository : GraphQLR2dbcRepository<Post>, CustomPostRepository {
-    fun findAllByAuthorId(authorId: ID, env: DataFetchingEnvironment): CompletableFuture<List<Post>>
+    fun connectionByAuthorId(authorId: ID, backward: Backward, env: DataFetchingEnvironment): CompletableFuture<Connection<Post>>
 }
 
 interface CustomPostRepository {

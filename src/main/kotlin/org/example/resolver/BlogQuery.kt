@@ -4,6 +4,7 @@ import com.expediagroup.graphql.server.operations.Query
 import graphql.schema.DataFetchingEnvironment
 import io.github.wickedev.graphql.interfases.Node
 import io.github.wickedev.graphql.repository.GraphQLNodeRepository
+import io.github.wickedev.graphql.types.Backward
 import io.github.wickedev.graphql.types.ID
 import kotlinx.coroutines.future.await
 import org.example.repository.PostRepository
@@ -27,12 +28,12 @@ class BlogQuery(
     }
 
     fun users(last: Int?, before: ID?, env: DataFetchingEnvironment): CompletableFuture<UserConnect> {
-        return userRepository.findAllBackwardConnectById(last, before, env)
+        return userRepository.connection(Backward(last, before), env)
             .thenApply { UserConnect(it.edges.map { e -> UserEdge(e.node, e.cursor) }, it.pageInfo) }
     }
 
     fun posts(last: Int?, before: ID?, env: DataFetchingEnvironment): CompletableFuture<PostConnect> {
-        return postRepository.findAllBackwardConnectById(last, before, env)
+        return postRepository.connection(Backward(last, before), env)
             .thenApply { PostConnect(it.edges.map { e -> PostEdge(e.node, e.cursor) }, it.pageInfo) }
     }
 }

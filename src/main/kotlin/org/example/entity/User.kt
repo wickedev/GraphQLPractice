@@ -3,9 +3,12 @@ package org.example.entity
 import com.expediagroup.graphql.generator.annotations.GraphQLIgnore
 import graphql.schema.DataFetchingEnvironment
 import io.github.wickedev.graphql.interfases.Node
+import io.github.wickedev.graphql.types.Backward
 import io.github.wickedev.graphql.types.ID
 import org.example.interfaces.SimpleUserDetails
 import org.example.repository.PostRepository
+import org.example.types.PostConnect
+import org.example.types.PostEdge
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
@@ -25,10 +28,12 @@ data class User(
 ) : Node, SimpleUserDetails {
 
     fun posts(
+        last: Int?, before: ID?,
         @GraphQLIgnore @Autowired postRepository: PostRepository,
         env: DataFetchingEnvironment
-    ): CompletableFuture<List<Post>> {
-        return postRepository.findAllByAuthorId(id, env)
+    ): CompletableFuture<PostConnect> {
+        return postRepository.connectionByAuthorId(id, Backward(last, before), env)
+            .thenApply { PostConnect(it.edges.map { e -> PostEdge(e.node, e.cursor) }, it.pageInfo) }
     }
 
     @GraphQLIgnore

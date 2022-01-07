@@ -81,9 +81,8 @@ dependencies {
     runtimeOnly("com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0")
 
     /* database */
-    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.2.0")
-    api("io.r2dbc:r2dbc-spi:0.9.0.RELEASE")
-    implementation("org.postgresql:r2dbc-postgresql:0.9.0.RC1")
+    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.3.1")
+    implementation("io.r2dbc:r2dbc-postgresql")
     implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.8.0")
 
     /* security */
