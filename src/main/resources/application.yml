@@ -3,10 +3,6 @@ graphql:
     - org.example
     - io.github.wickedev.graphql
     - org.springframework.security.core.userdetails.UserDetails
-  federation:
-    enabled: true
-    tracing:
-      enabled: true
   voyager:
     enabled: true
   graphiql:

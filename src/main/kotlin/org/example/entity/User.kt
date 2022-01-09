@@ -37,7 +37,7 @@ data class User(
     }
 
     @GraphQLIgnore
-    override fun getUsername(): String = email
+    override fun getUsername(): String = id.encoded
 
     @GraphQLIgnore
     override fun getPassword(): String = hashSalt

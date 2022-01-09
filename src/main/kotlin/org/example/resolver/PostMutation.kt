@@ -27,7 +27,7 @@ class PostMutation(
 ) : Mutation {
 
     @Transactional
-    @Auth(requires = ["ROLE_USER"])
+    @Auth("#data.author == null || #data.author.connect.id == authentication.getName()")
     suspend fun createPost(data: PostCreateInput): Post {
         log.info("createPost() called with: data = $data")
 
@@ -53,7 +53,7 @@ class PostMutation(
     }
 
     @Transactional
-    @Auth(requires = ["ROLE_USER"])
+    @Auth("hasRole('USER')")
     suspend fun updatePost(where: PostWhereUniqueInput, data: PostUpdateInput): Post? {
         log.info("updatePost() called with: where = $where, data = $data")
         val criteria = from(where("id").`is`(where.id))
@@ -77,7 +77,7 @@ class PostMutation(
         return postRepository.findBy(criteria).await()
     }
 
-    @Auth(requires = ["ROLE_USER"])
+    @Auth("hasRole('USER')")
     suspend fun  deletePost(where: PostWhereUniqueInput): ID? {
         log.info("deletePost() called with: where = $where")
 

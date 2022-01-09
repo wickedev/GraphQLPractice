@@ -2,6 +2,7 @@ package org.example.resolver
 
 import com.expediagroup.graphql.server.operations.Query
 import graphql.schema.DataFetchingEnvironment
+import io.github.wickedev.graphql.Auth
 import io.github.wickedev.graphql.interfases.Node
 import io.github.wickedev.graphql.repository.GraphQLNodeRepository
 import io.github.wickedev.graphql.types.Backward
