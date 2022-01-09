@@ -2,7 +2,6 @@ graphql:
   packages:
     - org.example
     - io.github.wickedev.graphql
-    - org.springframework.security.core.userdetails.UserDetails
   voyager:
     enabled: true
   graphiql:
