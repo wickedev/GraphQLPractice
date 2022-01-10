@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.example.resolver
 
 import com.expediagroup.graphql.server.operations.Query
@@ -28,6 +30,7 @@ class BlogQuery(
         return nodeRepository.findNodeById(id, env).await()
     }
 
+    @Auth("hasRole('ADMIN')")
     fun users(last: Int?, before: ID?, env: DataFetchingEnvironment): CompletableFuture<UserConnect> {
         return userRepository.connection(Backward(last, before), env)
             .thenApply { UserConnect(it.edges.map { e -> UserEdge(e.node, e.cursor) }, it.pageInfo) }

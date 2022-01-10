@@ -70,7 +70,7 @@ dependencies {
 
     /* graphql */
     api("com.graphql-java:graphql-java:17.3")
-    implementation("io.github.wickedev:graphql-jetpack-starter:0.3.3")
+    implementation("io.github.wickedev:graphql-jetpack-starter:0.3.6")
     implementation("com.expediagroup:graphql-kotlin-spring-server:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-spring-client:$graphQLKotlinVersion")
     implementation("com.expediagroup:graphql-kotlin-hooks-provider:$graphQLKotlinVersion")
@@ -82,7 +82,7 @@ dependencies {
     runtimeOnly("com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0")
 
     /* database */
-    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.3.3")
+    implementation("io.github.wickedev:spring-data-graphql-r2dbc-starter:0.3.6")
     implementation("io.r2dbc:r2dbc-postgresql")
     implementation("name.nkonev.r2dbc-migrate:r2dbc-migrate-spring-boot-starter:1.8.0")
 
